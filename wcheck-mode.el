@@ -32,8 +32,8 @@
 ;;       "Toggle wcheck-mode." t)
 ;;     (autoload 'wcheck-change-language "wcheck-mode"
 ;;       "Switch wcheck-mode languages." t)
-;;     (autoload 'wcheck-spelling-suggestions "wcheck-mode"
-;;       "Spelling suggestions." t)
+;;     (autoload 'wcheck-actions "wcheck-mode"
+;;       "Open the action menu." t)
 ;;     (autoload 'wcheck-jump-forward "wcheck-mode"
 ;;       "Move point forward to next marked text area." t)
 ;;     (autoload 'wcheck-jump-backward "wcheck-mode"
@@ -141,27 +141,6 @@
                   (const :tag "sensitive" nil)
                   (const :tag "insensitive" t)))
 
-    (cons :tag "Suggestion program" :format "%v"
-          (const :tag "Suggestion program" :format "%t: " suggestion-program)
-          (choice :format "%[Type%] %v"
-                  (file :tag "Filename" :format "\n\t\t%t: %v")
-                  (function :tag "Function" :format "\n\t\t%t: %v")))
-
-    (cons :tag "Suggestion program's arguments" :format "%v"
-          (const :format "" suggestion-args)
-          (repeat :tag "Suggestion program's arguments"
-                  (string :format "%v")))
-
-    (cons :tag "Suggestion parser function" :format "%v"
-          (const :tag "Suggestion parser" :format "%t: "
-                 suggestion-parser)
-          (choice :format "%[Parser%] %v" :value nil
-                  (const :tag "Ispell" wcheck-parser-ispell-suggestions)
-                  (const :tag "Lines" wcheck-parser-lines)
-                  (const :tag "Whitespace" wcheck-parser-whitespace)
-                  (function :tag "Custom function"
-                            :format "%t:\n\t\t%v")))
-
     (cons
      :tag "Read or skip faces" :format "%v"
      (const :tag "Read or skip faces" :format "%t" read-or-skip-faces)
@@ -196,50 +175,91 @@
                     (cons :tag "Skip selected faces" :format "%v"
                           (const :tag "Skip selected faces"
                                  :format "%t" skip)
-                          (repeat :tag "" (sexp :format "%v")))))))))
+                          (repeat :tag "" (sexp :format "%v")))))))
+
+    (cons :tag "Action program" :format "%v"
+          (const :tag "Action program" :format "%t: " action-program)
+          (choice :format "%[Type%] %v"
+                  (file :tag "Filename" :format "\n\t\t%t: %v")
+                  (function :tag "Function" :format "\n\t\t%t: %v")))
+
+    (cons :tag "Action program's arguments" :format "%v"
+          (const :format "" action-args)
+          (repeat :tag "Action program's arguments"
+                  (string :format "%v")))
+
+    (cons :tag "Action parser function" :format "%v"
+          (const :tag "Action parser" :format "%t: "
+                 action-parser)
+          (choice :format "%[Parser%] %v" :value nil
+                  (const :tag "Ispell" wcheck-parser-ispell-suggestions)
+                  (const :tag "Lines" wcheck-parser-lines)
+                  (const :tag "Whitespace" wcheck-parser-whitespace)
+                  (function :tag "Custom function"
+                            :format "%t:\n\t\t%v")))))
 
 
 ;;;###autoload
 (defcustom wcheck-language-data nil
   "Language configuration for `wcheck-mode'.
 
-Elements of this alist are of the form:
+The variable is an association list (alist) and its elements are
+of the form:
 
     (LANGUAGE (KEY . VALUE) [(KEY . VALUE) ...])
 
-LANGUAGE is a name string for a language and KEY and VALUE pairs
-denote settings for the language. Here is a description of
-possible KEYs:
+LANGUAGE is a name string for this particular configuration unit
+and KEY and VALUE pairs denote settings for the language.
+
+Below is the documentation of possible KEYs and corresponding
+VALUEs. The documentation is divided in three parts: (1) checker
+options, (2) action options and (3) examples. The first part
+describes all options related to checking (and possibly marking
+some of) the content of an Emacs buffer. The second part
+describes options which configure actions which user can choose
+for a marked text on buffer. The third part gives configuration
+examples to help you get `wcheck-mode' going.
+
+NOTE: There is also variable `wcheck-language-data-defaults'
+which is used to define default values. The defaults are used
+when a language-specific option in `wcheck-language-data' does
+not exist or is not valid.
+
+
+Checker options
+===============
+
+The checker options configure LANGUAGE's text-checking and
+text-marking features. With these you can configure how buffer's
+content is examined, what checker engine is used and how text is
+marked in the buffer.
 
 program
-    VALUE can be a string or a function. If VALUE is a string, it
-    must be the name of the external executable program which is
-    responsible for text-checking LANGUAGE. Communication with
-    the external program is managed through standard input and
-    output streams.
+args
+    `program' is either the name (a string) of an external
+    executable program or an Emacs Lisp function (a symbol or a
+    lambda expression). They are used as the checker engine for
+    the LANGUAGE. When `program' names an external executable
+    program then `args' are the command-line arguments (a list of
+    strings) for the program.
 
     `wcheck-mode' collects text strings from the buffer and sends
-    them (each on a separate line) to the external program for
-    analyzing. The program must output (one way or another) the
-    strings which it thinks should be marked in the Emacs buffer.
-    The output of the program is then parsed with `parser'
-    function (see below).
+    them to `program' to analyze. When `program' is an external
+    executable program the collected strings are sent (each on a
+    separate line) through the standard input stream to the
+    program. The program must write to standard output stream all
+    the strings which it thinks should be marked in the Emacs
+    buffer. The output of the program is then parsed with
+    `parser' function (see below).
 
-    VALUE can also be an Emacs Lisp function (a symbol or a
-    lambda). Then that function is used as the text checker. The
-    function is called with one argument: a list of strings
-    collected from the buffer. The function is supposed to check
-    them and return a list of strings (or nil). The returned
-    strings will be marked in the buffer.
+    When `program' is an Emacs Lisp function (a symbol or a
+    lambda expression) the function is called with one argument:
+    a list of strings collected from the buffer. The function is
+    supposed to check them and return a list of strings (or nil).
+    The returned strings will be marked in the buffer.
 
     See options `regexp-start', `regexp-body' and `regexp-end'
     below for details on how text is collected from the buffer.
-
-args
-    Optional command-line arguments for the program. The VALUE is
-    a list of strings. Each string is a single argument for the
-    program. (This option is ignored when the program is a
-    function.)
 
 parser
     VALUE of this option is an Emacs Lisp function which is
@@ -253,7 +273,7 @@ parser
     the buffer. From that buffer the `parser' function should
     collect all the strings that are meant to be marked in the
     buffer that is being checked. The function must return them
-    as a list of strings or nil if there are none.
+    as a list of strings or nil if there are none to be marked.
 
     For the most common cases there are two parser functions
     already implemented:
@@ -281,8 +301,9 @@ face
 
 syntax
     VALUE is a symbol referring to an Emacs syntax table. This
-    will be the effective syntax table that is used with regular
-    expressions. See the Info node `(elisp)Syntax Tables' for
+    will be the effective syntax table for `wcheck-mode's regular
+    expressions. It does not affect the syntax table settings
+    anywhere else. See the Info node `(elisp)Syntax Tables' for
     more information. The default value is
     `text-mode-syntax-table'.
 
@@ -339,7 +360,7 @@ regexp-discard
     spelling checker.
 
     If you don't want to have any discarding rules set this
-    option to empty string.
+    option to empty string (\"\").
 
 case-fold
     This boolean value is used to set value for variable
@@ -348,55 +369,6 @@ case-fold
     non-nil means case-insensitive search. The default is
     case-sensitive (nil). Note that this only has effect on
     `wcheck-mode's internal regular expression search.
-
-suggestion-program
-suggestion-args
-    `suggestion-program' is either name (a string) of an external
-    executable program or an Emacs Lisp function (a symbol or a
-    lambda). When it's the name of an executable program then
-    `suggestion-args' are the command-line arguments (a list of
-    strings) for the program.
-
-    When user clicks the right mouse button on marked text, or
-    executes command `wcheck-spelling-suggestions', the marked
-    text will be sent to the `suggestion-program' as standard
-    input stream. The program should send suggested substitutes
-    to the standard output stream. The output is parsed with
-    `suggestion-parser' function (see below).
-
-    When `suggestion-program' is an Emacs Lisp function the
-    function is called with one argument: the marked text (a
-    string) which user wants spelling suggestions for. The
-    function must return all substitute suggestions as a list of
-    strings or nil if there are no suggestions.
-
-suggestion-parser
-    VALUE of this option is an Emacs Lisp function which is
-    responsible for parsing the output of `suggestion-program'.
-    This parser function is only used when `suggestion-program'
-    is an external executable program (not a function).
-
-    The parser function is run without arguments and within the
-    context of a buffer that contains all the output from the
-    external program. The point is located at the beginning of
-    the buffer. `suggestion-parser' function should collect all
-    the substitute suggestions from the buffer and return them as
-    a list of strings or nil if there are no suggestions.
-
-    For the most common cases there are three parser functions
-    already implemented:
-
-        `wcheck-parser-ispell-suggestions' parses substitute
-        suggestions from the output of Ispell or compatible
-        program, such as Enchant or Aspell. Use this function as
-        the `suggestion-parser' if you get suggestions from an
-        Ispell-like program with its \"-a\" command-line option.
-
-        `wcheck-parser-lines' function turns each line in the
-        output to individual substitute suggestions.
-
-        `wcheck-parser-whitespace'. Each whitespace-separated
-        token in the program's output is a separate suggestion.
 
 read-or-skip-faces
     This option controls which faces `wcheck-mode' should read or
@@ -448,40 +420,250 @@ read-or-skip-faces
 
     which means that in all major modes read everything. It is
     sometimes useful to have this setting in language-specific
-    options too because the parsing stops right there. Therefore
-    it overrides all global settings which user may have
-    configured with variable `wcheck-language-data-defaults'.
+    options because the parsing stops right there. Therefore it
+    overrides all global settings which user may have changed
+    with variable `wcheck-language-data-defaults'.
 
     Note: You can use command `\\[what-cursor-position]' with a
     prefix argument to see what faces are active at the cursor
     position. Then you can use the information to configure this
     option.
 
-Here's an example value for the `wcheck-language-data' variable:
 
-    ((\"Finnish\"
-      (program . \"/usr/bin/enchant\")
-      (args  \"-l\" \"-d\" \"fi\")
-      (syntax . my-finnish-syntax-table)
-      (suggestion-program . \"/usr/bin/enchant\")
-      (suggestion-args \"-a\" \"-d\" \"fi\")
-      (suggestion-parser . wcheck-parser-ispell-suggestions))
-     (\"British English\"
-      (program . \"/usr/bin/ispell\")
-      (args \"-l\" \"-d\" \"british\")
-      (suggestion-program . \"/usr/bin/ispell\")
-      (suggestion-args \"-a\" \"-d\" \"british\")
-      (suggestion-parser . wcheck-parser-ispell-suggestions))
-     (\"Trailing whitespace\"
-      (program . identity)
-      (suggestion-program . (lambda (string) (list \"\")))
-      (face . highlight)
-      (regexp-start . \"\")
-      (regexp-body . \"[ \\t]+\")
-      (regexp-end . \"$\")
-      (regexp-discard . \"\")
-      (read-or-skip-faces)
-       (nil))
+Action options
+==============
+
+\"Actions\" are any kind of operations that can be triggered
+for marked text in an Emacs buffer. Actions are presented to user
+through a menu which is activated either by (1) clicking the
+right mouse button on a marked text or (2) executing interactive
+command `wcheck-actions' while the cursor (the point) is on a
+marked text.
+
+If you use `wcheck-mode' as a spelling checker then it's natural
+to configure an action menu that offers spelling suggestions for
+the misspelled word. The action menu could also have an option to
+add the word to spell-checker's dictionary, so that the word is
+recognized next time. See examples of this kind of configuration
+below.
+
+action-program
+action-args
+    `action-program' is either the name (a string) of an external
+    executable program or an Emacs Lisp function (a symbol or a
+    lambda expression). When it's the name of an executable
+    program then `action-args' are the command-line arguments (a
+    list of strings) for the program.
+
+    When `action-program' is an external executable program the
+    marked text is sent to the program through the standard input
+    stream. The program should send its feedback data (usually
+    suggested substitute strings) to the standard output stream.
+    The output is parsed with `action-parser' function (see
+    below) and function's return value is used to construct an
+    action menu for user. The format and effect of
+    `action-parser' function's return value is discussed below.
+
+    When `action-program' is an Emacs Lisp function the function
+    is called with one argument: a vector returned by
+    `wcheck-marked-text-at' function. The `action-program'
+    function is supposed to gather some substitute suggestion
+    strings or give other actions for the marked text in the
+    buffer. Function's return value is used to construct an
+    action menu for user. The format and effect of
+    `action-program' function's return value is discussed below.
+
+action-parser
+    VALUE of this option is an Emacs Lisp function which is
+    responsible for parsing the output of `action-program'. This
+    parser function is only used when `action-program' is an
+    external executable program (not a function).
+
+    The parser function is run with one argument: a vector
+    returned by `wcheck-marked-text-at' for the marked text in
+    question. The parser function is called within the context of
+    a buffer that contains all the output from `action-program'.
+    The point is located at the beginning of the buffer.
+
+    The `action-parser' function should examine the buffer for
+    interesting information (such as spelling suggestions) and
+    return them the in the format that is described below.
+
+    For the most common cases there are three parser functions
+    already implemented:
+
+        `wcheck-parser-ispell-suggestions' parses substitute
+        suggestions from the output of Ispell or compatible
+        program, such as Enchant or Aspell. Use this function as
+        the `action-parser' if you get spelling suggestions from
+        an Ispell-like program with its \"-a\" command-line
+        option.
+
+        `wcheck-parser-lines' function turns each line in the
+        output to individual substitute suggestions.
+
+        `wcheck-parser-whitespace'. Each whitespace-separated
+        token in the program's output is a separate suggestion.
+
+The return value of `action-program' function and `action-parser'
+function must be a list. The empty list (nil) means that there
+are no actions available for the marked text. Otherwise each
+elements in the list must be either a string or a cons cell. If
+an element is a string it is an individual substitute suggestion
+string for the original marked text. The same string is shown in
+the actions menu. When user chooses such option from the action
+menu the original text is substituted in the Emacs buffer.
+
+If an element is a cons cell it must be one of
+
+    (\"Menu item\" . \"substitute string\")
+    (\"Menu item\" . some-function)
+
+The \"car\" value of the cons cell must be a string. The string
+is shown in the action menu as one of the options. The \"cdr\"
+value of the cons cell defines the action that is taken for the
+menu option. If the \"cdr\" value is a string then that string is
+the substitute string. If the \"cdr\" value is a function (a
+symbol or a lambda expression) then that function is called when
+user chooses the menu option. The function is called with one
+argument: a vector returned by `wcheck-marked-text-at' function
+for the marked text in question.
+
+Effectively `action-program' function or `action-program'
+executable program with `action-parser' function present a
+feature that can offer spelling suggestions for user: just return
+suggestions as a list of strings. Alternatively they can offer
+any kind of useful actions by calling custom functions. There are
+a lot of possibilities.
+
+
+Examples
+========
+
+Here are some examples on how you can fill the
+`wcheck-language-data' variable. The variable is a list of
+language-configurations:
+
+    (setq wcheck-language-data
+          '((\"language\"
+             ...)
+            (\"another language\"
+             ...)))
+
+Perhaps the most common use for `wcheck-mode' is to spell-check
+human languages with Ispell (or compatible) spelling checker.
+Let's start with examples on how to configure that.
+
+The following settings configure two languages which are named
+\"British English\" and \"Finnish\". The former language uses
+Ispell program as the spell-checker engine. The latter uses
+Enchant which has an Ispell-compatible command-line interface.
+Both languages use `wcheck-mode's actions feature to offer
+spelling suggestions for misspelled words. Since both spelling
+checkers print spelling suggestions in the Ispell format we use
+built-in function `wcheck-parse-ispell-suggestions' to parse the
+output and populate the actions (spelling suggestions) menu for
+user.
+
+    (\"British English\"
+     (program . \"/usr/bin/ispell\")
+     (args \"-l\" \"-d\" \"british\")
+     (action-program . \"/usr/bin/ispell\")
+     (action-args \"-a\" \"-d\" \"british\")
+     (action-parser . wcheck-parser-ispell-suggestions))
+
+    (\"Finnish\"
+     (program . \"/usr/bin/enchant\")
+     (args  \"-l\" \"-d\" \"fi\")
+     (syntax . my-finnish-syntax-table)
+     (action-program . \"/usr/bin/enchant\")
+     (action-args \"-a\" \"-d\" \"fi\")
+     (action-parser . wcheck-parser-ispell-suggestions))
+
+The \"Finnish\" language above used a special syntax table called
+my-finnish-syntax-table. It could be defined like this:
+
+    (defvar my-finnish-syntax-table
+      (copy-syntax-table text-mode-syntax-table))
+
+    (modify-syntax-entry ?- \"w\" my-finnish-syntax-table)
+
+That is, it copies `text-mode-syntax-table' (which `wcheck-mode'
+uses by default) and sets the syntactic meaning of the ASCII
+hyphen character (-) to a word character (\"w\"). `wcheck-mode'
+and its regular expression search will use that syntax table when
+scanning buffers' content in that language.
+
+Below is an example on how to add an \"Add to dictionary\"
+feature to the actions menu, among spelling suggestions. First,
+there's the language configuration. The following example is
+similar to the \"British English\" configuration above except
+that `action-parser' function is a bit more complicated. It's a
+lambda expression which calls `wcheck-parser-ispell-suggestions'
+and then adds \"Add to dictionary\" option in the front of the
+spelling suggestions list. Choosing that option from the actions
+menu will call function add-word-to-dictionary (which doesn't
+exist yet).
+
+    (\"British English\"
+     (program . \"/usr/bin/ispell\")
+     (args \"-l\" \"-d\" \"british\")
+     (action-program . \"/usr/bin/ispell\")
+     (action-args \"-a\" \"-d\" \"british\")
+     (action-parser . (lambda (marked-text)
+                        (cons (cons \"[Add to dictionary]\"
+                                    'add-word-to-dictionary)
+                              (wcheck-parser-ispell-suggestions)))))
+
+Now we need to define the function add-word-to-dictionary. Below
+is an incomplete example. To make it complete you'll have to find
+out how and where your spelling checker stores user dictionaries.
+Then write code that adds a new string to the dictionary.
+
+    (defun add-word-to-dictionary (marked-text)
+      ;; MARKED-TEXT is a vector returned by
+      ;; `wcheck-marked-text-at' function.
+      (let ((word (aref marked-text 0))
+            (language (aref marked-text 4)))
+        ;; Do the actual job here. That is, write code that adds
+        ;; the string stored in variable \"word\" to the
+        ;; appropriate dictionary.
+        (message \"Added word \\\"%s\\\" to the %s dictionary\"
+                 word language)))
+
+Spell-checking human languages is not the only application for
+`wcheck-mode'. The following configuration adds language called
+\"Trailing whitespace\" which finds and marks all trailing
+whitespace characters (spaces and tabs) on buffer's lines. It
+uses regular expressions to match the whitespace. The checker
+program is the Emacs Lisp function `identity' which just returns
+its argument unchanged. The `action-program' feature is used to
+build an action menu with just one option: remove the whitespace.
+It replaces the original whitespace string with empty string.
+
+    (\"Trailing whitespace\"
+     (program . identity)
+     (action-program . (lambda (marked-text)
+                         (list (cons \"Remove whitespace\" \"\"))))
+     (face . highlight)
+     (regexp-start . \"\")
+     (regexp-body . \"[ \\t]+\")
+     (regexp-end . \"$\")
+     (regexp-discard . \"\")
+     (read-or-skip-faces
+      (nil)))
+
+Sometimes it's useful to highlight only a small number of
+keywords in buffer. The following example adds a language called
+\"Highlight FIXMEs\" to mark \"FIXME\" words. FIXME is some
+programmers' convention to put reminders in source code that some
+parts are not complete yet and will be fixed or completed later.
+In source code files such keywords are written in program's
+comments only, not in the actual code, so we use
+`read-or-skip-faces' feature to scan only the comments. This
+example configures it for `emacs-lisp-mode' and `c-mode'. In all
+other major modes FIXMEs are marked everywhere.
+
      (\"Highlight FIXMEs\"
       (program . (lambda (strings)
                    (when (member \"FIXME\" strings)
@@ -489,11 +671,40 @@ Here's an example value for the `wcheck-language-data' variable:
       (face . highlight)
       (read-or-skip-faces
        ((emacs-lisp-mode c-mode) read font-lock-comment-face)
-       (nil))))
+       (nil)))
 
-You can use variable `wcheck-language-data-defaults' to define
-default values for all these options. The defaults are used when
-language-specific option does not exist or is not valid."
+The following example adds a language \"email\" for highlighting
+email addresses from buffer and creating an action menu which has
+option to start composing mail to that address. First, here's the
+language configuration:
+
+    (\"email\"
+     (program . email-address-detect)
+     (face . highlight)
+     (regexp-start . \"\")
+     (regexp-body . \"\\\\S-+@\\\\S-+\")
+     (regexp-end . \"\")
+     (action-program . email-action-menu)
+     (read-or-skip-faces
+      (nil)))
+
+Then the needed functions:
+
+    (defun email-address-detect (strings)
+      (let (addresses)
+        (dolist (string strings addresses)
+          (when (string-match \"\\\\<[a-z.-]+\\\\>@\\\\<[a-z.-]+\\\\>\"
+                              string)
+            (push (match-string-no-properties 0 string) addresses)))))
+
+    (defun email-action-menu (marked-text)
+      (list (cons (concat \"Mail to <\" (aref marked-text 0) \">\")
+                  (lambda (marked-text)
+                    (compose-mail (aref marked-text 0))))))
+
+Note that detecting all valid email addresses is difficult and a
+much more advanced parser is needed for that. Feel free to
+replace the above detection function with a better one."
 
   :group 'wcheck
   :type
@@ -536,7 +747,7 @@ settings.
 Here's an example value for the variable:
 
     ((parser . wcheck-parser-lines)
-     (suggestion-parser . wcheck-parser-ispell-suggestions)
+     (action-parser . wcheck-parser-ispell-suggestions)
      (connection . nil)
      (face . wcheck-default-face)
      (syntax . text-mode-syntax-table)
@@ -680,11 +891,10 @@ slower. A suitable compromise may be 3 or 4.")
 (wcheck-define-condition wcheck-program-not-configured-error wcheck-error)
 (wcheck-define-condition wcheck-not-a-list-of-strings-error wcheck-error)
 (wcheck-define-condition wcheck-funcall-error wcheck-error)
-(wcheck-define-condition wcheck-suggestion-error wcheck-error)
-(wcheck-define-condition wcheck-suggestion-program-error
-  wcheck-suggestion-error)
+(wcheck-define-condition wcheck-action-error wcheck-error)
+(wcheck-define-condition wcheck-action-program-error wcheck-action-error)
 (wcheck-define-condition wcheck-parser-function-not-configured-error
-  wcheck-suggestion-error)
+  wcheck-action-error)
 (wcheck-define-condition wcheck-overlay-not-found-error wcheck-error)
 
 
@@ -835,13 +1045,13 @@ mode. You can access the variables through customize group
 `wcheck'.
 
 Interactive command `wcheck-change-language' is used to switch
-languages. Command `wcheck-spelling-suggestions' gives spelling
-suggestions for marked text at point (also accessible through the
-right-click mouse menu). Commands `wcheck-jump-forward' and
+languages. Command `wcheck-actions' gives an action menu for the
+marked text at point (also accessible through the right-click
+mouse menu). Commands `wcheck-jump-forward' and
 `wcheck-jump-backward' move point to next/previous marked text
 area.
 
-A note for Emacs Lisp programmers: Emacs Lisp Function
+A note for Emacs Lisp programmers: Emacs Lisp function
 `wcheck-marked-text-at' returns information about marked text at
 a buffer position. Function `wcheck-query-language-data' can be
 used for querying effective configuration data for a language."
@@ -1365,7 +1575,7 @@ text."
         (wcheck-with-language-data
             (language (wcheck-buffer-data-get :buffer buffer :language))
             (regexp-start regexp-end syntax (case-fold-search case-fold)
-                          (ol-face face) suggestion-program)
+                          (ol-face face) action-program)
 
           (let ((face-p (wcheck-generate-face-predicate language major-mode))
                 (search-spaces-regexp nil)
@@ -1374,11 +1584,11 @@ text."
                 (ol-help-echo nil)
                 regexp old-point)
 
-            (when suggestion-program
+            (when action-program
               (define-key ol-keymap [down-mouse-3] 'wcheck-mouse-click-overlay)
               (define-key ol-keymap [mouse-3] 'undefined)
               (setq ol-mouse-face 'highlight
-                    ol-help-echo "mouse-3: show suggestions"))
+                    ol-help-echo "mouse-3: show actions"))
 
             (with-syntax-table (eval syntax)
               (save-match-data
@@ -1524,17 +1734,23 @@ text."
                              (- (point) wcheck-jump-step))))))))
 
 
-;;; Spelling suggestions
+;;; Actions
 
 
 (defun wcheck-marked-text-at (pos)
   "Return information about marked text at POS.
 
 POS is a buffer position. The return value is a vector of five
-items: (1) the marked text string, (2) buffer position at the
+elements: (1) the marked text string, (2) buffer position at the
 beginning of the text, (3) position at the end of the text, (4)
 the overlay object which marks the text and (5) the current
-language as a string."
+language as a string. The return value is nil if there are no
+marked text at POS.
+
+If you need more information about the current language settings
+use `wcheck-query-language-data' for querying effective language
+settings."
+
   (let ((overlay (catch 'my-overlay
                    (dolist (ol (overlays-at pos))
                      (when (overlay-get ol 'wcheck-mode)
@@ -1549,96 +1765,83 @@ language as a string."
 
 
 ;;;###autoload
-(defun wcheck-spelling-suggestions (pos &optional event)
-  "Offer spelling suggestions for marked text.
+(defun wcheck-actions (pos &optional event)
+  "Offer actions for marked text.
 
 This function is usually called through a right mouse button
 event or interactively by a user. In both cases function's
 arguments are filled automatically.
 
-If buffer position POS is on marked text (and substitute
-suggestion program is properly configured) show a menu of
-suggested substitutions. When this function is called
-interactively POS is automatically the current point position.
-Optional EVENT argument is a mouse event which is present if this
-function is called through a right mouse button click on marked
-text. If EVENT is non-nil use a graphic toolkit's menu (when
-available) for selecting suggestions. Otherwise use a text menu.
+If buffer position POS is on marked text (and action program is
+properly configured) show a menu of actions. When this function
+is called interactively POS is automatically the current point
+position. Optional EVENT argument is a mouse event which is
+present if this function is called through a right mouse button
+click on marked text. If EVENT is non-nil use a graphic toolkit's
+menu (when available) for selecting actions. Otherwise use a text
+menu.
 
-When user chooses one of the suggestions from the menu the
-original marked text is replaced with the chosen substitute.
-Function returns the replacement text (string) or nil if nothing
-was replaced."
+When user chooses one of the options from the menu the related
+action is executed. It could mean that the original marked text
+is replaced with the chosen substitute. Menu options can trigger
+any kind of actions, though."
 
   (interactive "d")
   (condition-case error-data
-      (let ((overlay-data (or (wcheck-marked-text-at pos)
-                              (wcheck-marked-text-at (1- pos))))
+      (let ((marked-text (or (wcheck-marked-text-at pos)
+                             (wcheck-marked-text-at (1- pos))))
             (return-value nil))
-        (if (not overlay-data)
-            (signal 'wcheck-suggestion-error "There is no marked text here")
-          (let* ((text (aref overlay-data 0))
-                 (start (copy-marker (aref overlay-data 1)))
-                 (end (copy-marker (aref overlay-data 2)))
-                 (suggestions (wcheck-get-suggestions wcheck-language text))
+        (if (not marked-text)
+            (signal 'wcheck-action-error "There is no marked text here")
+          (let* ((start (copy-marker (aref marked-text 1)))
+                 (end (copy-marker (aref marked-text 2)))
+                 (actions (wcheck-get-actions marked-text))
                  (choice (if (and (display-popup-menus-p) event)
-                             (wcheck-choose-suggestion-popup
-                              suggestions event)
-                           (wcheck-choose-suggestion-minibuffer
-                            suggestions))))
-            (when (and (stringp choice)
-                       (markerp start)
-                       (markerp end))
-              (with-current-buffer (marker-buffer start)
-                (if buffer-read-only
-                    (signal 'wcheck-suggestion-error "Buffer is read-only")
-                  (delete-region start end)
-                  (goto-char start)
-                  (insert choice)
-                  (setq return-value choice))))
+                             (wcheck-choose-action-popup actions event)
+                           (wcheck-choose-action-minibuffer actions))))
+            (cond ((and (stringp choice)
+                        (markerp start)
+                        (markerp end))
+                   (with-current-buffer (marker-buffer start)
+                     (if buffer-read-only
+                         (signal 'wcheck-action-error "Buffer is read-only")
+                       (delete-region start end)
+                       (goto-char start)
+                       (insert choice)
+                       (setq return-value choice))))
+                  ((functionp choice)
+                   (funcall choice marked-text)
+                   (setq return-value choice)))
             (if (markerp start) (set-marker start nil))
             (if (markerp end) (set-marker end nil))))
         return-value)
 
-    (wcheck-suggestion-program-error
-     (message "Language \"%s\": suggestion program is not configured"
+    (wcheck-action-program-error
+     (message "Language \"%s\": action program is not configured"
               (cdr error-data)))
 
     (wcheck-parser-function-not-configured-error
      (message "Language \"%s\": parser function is not configured"
               (cdr error-data)))
 
-    (wcheck-not-a-list-of-strings-error
-     (message (concat "Suggestion program or parser function did not return "
-                      "a list of strings (or nil)")))
-
     (wcheck-error
      (message "%s" (cdr error-data)))))
 
 
-(defun wcheck-get-suggestions (language text)
-  "Get suggestions from external program or function.
+(defun wcheck-get-actions (marked-text)
+  "Get actions from external program or a function.
 
-If LANGUAGE uses an external program for suggestions, then this
-function runs the program and sends TEXT as standard input stream
-for the program. Program's output is parsed with user-configured
-parser function (see `wcheck-language-data') and possible
-substitute suggestions are returned as a list of strings (or nil
-if there aren't any).
-
-If LANGUAGE uses an Emacs Lisp function for suggestions, then
-call the function with single argument TEXT. The function must
-return substitute suggestions as a list of strings (or nil if
-there aren't any)."
+MARKED-TEXT must be a vector such as the one returned by
+function `wcheck-marked-text-at' function."
 
   (wcheck-with-language-data
-      (nil language)
-      ((program suggestion-program)
-       (args suggestion-args)
-       (parser suggestion-parser))
+      (language (aref marked-text 4))
+      ((program action-program)
+       (args action-args)
+       (parser action-parser))
 
-    (cond ((not (wcheck-suggestion-program-configured-p language))
-           (signal 'wcheck-suggestion-program-error language))
+    (cond ((not (wcheck-action-program-configured-p language))
+           (signal 'wcheck-action-program-error language))
 
           ((and (stringp program)
                 (not parser))
@@ -1646,30 +1849,39 @@ there aren't any)."
 
           ((stringp program)
            (with-temp-buffer
-             (insert text)
+             (insert (aref marked-text 0))
              (apply #'call-process-region (point-min) (point-max)
                     program t t nil args)
              (goto-char (point-min))
-             (let ((suggestions
-                    (save-match-data
-                      (condition-case nil (funcall parser)
-                        (error (signal 'wcheck-funcall-error
-                                       (concat "Suggestion parser function "
-                                               "signaled an error")))))))
-               (if (wcheck-list-of-strings-p suggestions)
-                   suggestions
-                 (signal 'wcheck-not-a-list-of-strings-error nil)))))
+             (wcheck-clean-actions
+              (save-match-data
+                (condition-case nil (funcall parser marked-text)
+                  (error (signal 'wcheck-funcall-error
+                                 (concat "Action parser function "
+                                         "signaled an error"))))))))
 
           ((functionp program)
-           (let ((suggestions
-                  (save-match-data
-                    (condition-case nil (funcall program text)
-                      (error (signal 'wcheck-funcall-error
-                                     (concat "Suggestion function signaled "
-                                             "an error")))))))
-             (if (wcheck-list-of-strings-p suggestions)
-                 suggestions
-               (signal 'wcheck-not-a-list-of-strings-error nil)))))))
+           (wcheck-clean-actions
+            (save-match-data
+              (condition-case nil (funcall program marked-text)
+                (error (signal 'wcheck-funcall-error
+                               (concat "Action function signaled "
+                                       "an error"))))))))))
+
+
+(defun wcheck-clean-actions (actions)
+  (when (listp actions)
+    (delete nil (mapcar (lambda (item)
+                          (cond ((stringp item)
+                                 (cons (wcheck-clean-string item)
+                                       item))
+                                ((and (consp item)
+                                      (stringp (car item))
+                                      (or (functionp (cdr item))
+                                          (stringp (cdr item))))
+                                 (cons (wcheck-clean-string (car item))
+                                       (cdr item)))))
+                        actions))))
 
 
 (defun wcheck-clean-string (string)
@@ -1681,18 +1893,19 @@ there aren't any)."
       (replace-regexp-in-string "\\(?:\\` +\\| +\\'\\)" "" string))))
 
 
-(defun wcheck-choose-suggestion-popup (suggestions event)
-  "Create a pop-up menu to choose a substitute suggestion.
-SUGGESTIONS is a list of strings. EVENT is the mouse event that
+(defun wcheck-choose-action-popup (actions event)
+  "Create a pop-up menu to choose an action.
+ACTIONS is a list of strings. EVENT is the mouse event that
 originated this sequence of function calls. Return user's
 choice (a string) or nil."
-  (let ((menu (list "Choose a substitute"
-                    (cons "" (if suggestions
+  (let ((menu (list "Choose"
+                    (cons "" (if actions
                                  (mapcar (lambda (item)
-                                           (cons (wcheck-clean-string item)
-                                                 item))
-                                         suggestions)
-                               (list "[No suggestions]"))))))
+                                           (cons (wcheck-clean-string
+                                                  (car item))
+                                                 (cdr item)))
+                                         actions)
+                               (list "[No actions]"))))))
     (x-popup-menu event menu)))
 
 
@@ -1702,33 +1915,33 @@ choice (a string) or nil."
     (read-char prompt)))
 
 
-(defun wcheck-choose-suggestion-minibuffer (suggestions)
-  "Create a text menu to choose a substitute suggestion.
-SUGGESTIONS is a list of strings. Return user's choice (a string)
+(defun wcheck-choose-action-minibuffer (actions)
+  "Create a text menu to choose a substitute action.
+ACTIONS is a list of strings. Return user's choice (a string)
 or nil."
-  (if suggestions
+  (if actions
       (let ((chars (append (number-sequence ?1 ?9) (list ?0)
                            (number-sequence ?a ?z)))
             alist)
 
         (with-temp-buffer
-          (setq mode-line-format (list "--- Choose a substitute %-")
+          (setq mode-line-format (list "--- Choose %-")
                 cursor-type nil
                 truncate-lines t)
 
           (let (sug string)
-            (while (and suggestions chars)
-              (setq sug (car suggestions)
-                    suggestions (cdr suggestions)
+            (while (and actions chars)
+              (setq sug (car actions)
+                    actions (cdr actions)
                     string (concat (propertize (format "%c)" (car chars))
                                                'face 'bold)
-                                   " " (wcheck-clean-string sug) "  ")
-                    alist (cons (cons (car chars) sug) alist)
+                                   " " (wcheck-clean-string (car sug)) "  ")
+                    alist (cons (cons (car chars) (cdr sug)) alist)
                     chars (cdr chars))
               (insert string)
-              (when (and suggestions chars
+              (when (and actions chars
                          (> (+ (- (point) (line-beginning-position))
-                               (length (concat "x) " (car suggestions))))
+                               (length (concat "x) " (caar actions))))
                             (window-width)))
                 (delete-char -2)
                 (newline 1))))
@@ -1764,11 +1977,11 @@ or nil."
             ;; Return the choice or nil.
             (cond ((cdr (assq (wcheck-read-key prompt) alist)))
                   (t (message "Abort") nil)))))
-    (message "No suggestions")
+    (message "No actions")
     nil))
 
 
-(defun wcheck-parser-lines ()
+(defun wcheck-parser-lines (&rest ignored)
   "Parser for newline-separated output.
 Return current buffer's lines as a list of strings."
   (delete-dups (split-string (buffer-substring-no-properties
@@ -1776,7 +1989,7 @@ Return current buffer's lines as a list of strings."
                              "\n+" t)))
 
 
-(defun wcheck-parser-whitespace ()
+(defun wcheck-parser-whitespace (&rest ignored)
   "Parser for whitespace-separated output.
 Split current buffer's content to whitespace-separated tokens and
 return them as a list of strings."
@@ -1785,21 +1998,13 @@ return them as a list of strings."
                              "[ \f\t\n\r\v]+" t)))
 
 
-(defun wcheck-parser-ispell-suggestions ()
+(defun wcheck-parser-ispell-suggestions (&rest ignored)
   "Parser for Ispell-compatible programs' spelling suggestions."
   (let ((search-spaces-regexp nil))
     (when (re-search-forward "^& [^ ]+ \\([0-9]+\\) [0-9]+: \\(.+\\)$" nil t)
       (let ((count (string-to-number (match-string-no-properties 1)))
             (words (split-string (match-string-no-properties 2) ", " t)))
         (delete-dups (nbutlast words (- (length words) count)))))))
-
-
-(define-obsolete-function-alias 'wcheck-parse-suggestions-lines
-  'wcheck-parser-lines "2011.02.20")
-(define-obsolete-function-alias 'wcheck-parse-suggestions-ws
-  'wcheck-parser-whitespace "2011.02.20")
-(define-obsolete-function-alias 'wcheck-parse-suggestions-ispell
-  'wcheck-parser-ispell-suggestions "2011.02.20")
 
 
 ;;; Face information functions
@@ -1878,17 +2083,15 @@ expression will return a boolean."
                   (eq key 'regexp-discard))
               (stringp value)))
         ((and (or (eq key 'program)
-                  (eq key 'suggestion-program))
+                  (eq key 'action-program))
               (or (stringp value)
                   (functionp value))))
         ((and (eq key 'args)
-              (or (wcheck-list-of-strings-p value)
-                  ;; For backwards compatibility
-                  (stringp value))))
-        ((and (eq key 'suggestion-args)
+              (wcheck-list-of-strings-p value)))
+        ((and (eq key 'action-args)
               (wcheck-list-of-strings-p value)))
         ((and (or (eq key 'parser)
-                  (eq key 'suggestion-parser))
+                  (eq key 'action-parser))
               (functionp value)))
         ((or (eq key 'connection)
              (eq key 'case-fold)))
@@ -1898,9 +2101,11 @@ expression will return a boolean."
 
 (defun wcheck-query-language-data (language key)
   "Query `wcheck-mode' language data.
-Return LANGUAGE's value for KEY as defined in variable
+
+Return LANGUAGE's value for KEY. Valid keys (symbols) are
+described in the documentation of user variable
 `wcheck-language-data'. If that variable does not define
-a (valid) value for KEY then query the value from
+a (valid) value for the KEY then query the value from
 `wcheck-language-data-defaults' or
 `wcheck-language-data-defaults-hard-coded'."
 
@@ -1951,8 +2156,8 @@ a (valid) value for KEY then query the value from
         (functionp program))))
 
 
-(defun wcheck-suggestion-program-configured-p (language)
-  (let ((program (wcheck-query-language-data language 'suggestion-program)))
+(defun wcheck-action-program-configured-p (language)
+  (let ((program (wcheck-query-language-data language 'action-program)))
     (or (wcheck-program-executable-p program)
         (functionp program))))
 
@@ -2054,10 +2259,10 @@ range BEG to END. Otherwise remove all overlays."
 
 (defun wcheck-mouse-click-overlay (event)
   "Overlay mouse-click event.
-Send the mouse pointer position and mouse event to the spelling
-suggestion function."
+Send the mouse pointer position and mouse event to the
+`wcheck-actions' function."
   (interactive "e")
-  (wcheck-spelling-suggestions (posn-point (event-end event)) event))
+  (wcheck-actions (posn-point (event-end event)) event))
 
 
 ;;; Buffer data access functions
