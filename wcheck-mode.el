@@ -693,7 +693,8 @@ Then the needed functions:
     (defun email-address-detect (strings)
       (let (addresses)
         (dolist (string strings addresses)
-          (when (string-match \"\\\\<[a-z.-]+\\\\>@\\\\<[a-z.-]+\\\\>\"
+          (when (string-match \"\
+\\\\=\\<[a-z.-]+\\\\=\\>@\\\\=\\<[a-z.-]+\\\\=\\>\"
                               string)
             (push (match-string-no-properties 0 string) addresses)))))
 
