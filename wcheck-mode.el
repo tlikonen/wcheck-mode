@@ -541,8 +541,8 @@ Examples
 ========
 
 Here are some examples on how you can fill the
-`wcheck-language-data' variable. The value is a list of
-language-configurations:
+`wcheck-language-data' variable. The value is a list of language
+configurations:
 
     (setq wcheck-language-data
           '((\"language\"
