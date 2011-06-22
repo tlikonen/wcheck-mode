@@ -561,7 +561,7 @@ Enchant which has an Ispell-compatible command-line interface.
 Both languages use `wcheck-mode's actions feature to offer
 spelling suggestions for misspelled words. Since both spelling
 checkers print spelling suggestions in the Ispell format we use
-built-in function `wcheck-parse-ispell-suggestions' to parse the
+built-in function `wcheck-parser-ispell-suggestions' to parse the
 output and populate the actions (spelling suggestions) menu for
 user.
 
