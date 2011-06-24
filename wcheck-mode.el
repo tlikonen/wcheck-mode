@@ -316,20 +316,29 @@ regexp-end
 
     This is how they are used in practice: `wcheck-mode' scans
     buffer's content and looks for strings that match the
-    construct `regexp-start + regexp-body + regexp-end'. Strings
-    that match regexp-body (but not `regexp-discard', see below)
-    are sent to the text checker program or function to analyze.
+    following regular expression
 
-    Strings returned from the program or function are marked in
-    Emacs buffer using the following construction: `regexp-start
-    + (regexp-quote STRING) + regexp-end'. The middle part is
-    marked with `face' (see above) .
+        REGEXP-START\\(REGEXP-BODY\\)REGEXP-END
 
-    Do not use grouping constructs `\\( ... \\)' in the regular
-    expressions because the back reference `\\1' is used for
+    The regular expression back reference \\1 is used to extract
+    `regexp-body' part from the matched string. That string is
+    then matched against `regexp-discard' (see below) and if it
+    doesn't match the string is sent to the text checker program
+    or function to analyze.
+
+    Strings returned from the program or function are quoted for
+    regular expression special characters (with `regexp-quote'
+    function) and marked in Emacs buffer using the following
+    construction: `regexp-start + STRING + regexp-end'. The
+    STRING part is marked with `face' (see above) .
+
+    You can't use grouping constructs `\\( ... \\)' in
+    `regexp-start' because the back reference `\\1' is used for
     separating the body string from the start and end match. You
     can use \"shy\" groups `\\(?: ... \\)' which do not record
-    the matched substring.
+    the matched substring. Grouping constructs `\\( ... \\)' are
+    allowed in `regexp-body' and `regexp-end'. Just note that the
+    first group and back reference \\1 is already taken.
 
     The default values for the regular expressions are
 
@@ -347,7 +356,7 @@ regexp-discard
     the value of this option. If this regular expression matches,
     then the string is discarded and won't be sent to the
     text-checker program or function to analyze. You can use this
-    to define exceptions to the regexp-body match. The default
+    to define exceptions to the `regexp-body' match. The default
     value is
 
         \\`'+\\'
