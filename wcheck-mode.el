@@ -433,8 +433,8 @@ read-or-skip-faces
 Action options
 ==============
 
-\"Actions\" are any kind of operations that can be triggered
-for marked text in an Emacs buffer. Actions are presented to user
+\"Actions\" are any kind of operations that can be executed for
+marked text in an Emacs buffer. Actions are presented to user
 through a menu which is activated either by (1) clicking the
 right mouse button on a marked text or (2) executing interactive
 command `wcheck-actions' while the cursor (the point) is on a
@@ -462,7 +462,7 @@ action-args
     The output is parsed with `action-parser' function (see
     below) and function's return value is used to construct an
     action menu for user. The format and effect of
-    `action-parser' function's return value is discussed below.
+    `action-parser' function's return value is described below.
 
     When `action-program' is an Emacs Lisp function the function
     is called with one argument: a vector returned by
@@ -471,7 +471,7 @@ action-args
     strings or give other actions for the marked text in the
     buffer. Function's return value is used to construct an
     action menu for user. The format and effect of
-    `action-program' function's return value is discussed below.
+    `action-program' function's return value is described below.
 
 action-parser
     VALUE of this option is an Emacs Lisp function which is
@@ -530,7 +530,7 @@ argument: a vector returned by `wcheck-marked-text-at' function
 for the marked text in question.
 
 Effectively `action-program' function or `action-program'
-executable program with `action-parser' function present a
+executable program with `action-parser' function provide a
 feature that can offer spelling suggestions for user: just return
 suggestions as a list of strings. Alternatively they can offer
 any kind of useful actions by calling custom functions. There are
@@ -588,19 +588,19 @@ my-finnish-syntax-table. It could be defined like this:
 
     (modify-syntax-entry ?- \"w\" my-finnish-syntax-table)
 
-That is, it copies `text-mode-syntax-table' (which `wcheck-mode'
-uses by default) and sets the syntactic meaning of the ASCII
-hyphen character (-) to a word character (\"w\"). `wcheck-mode'
-and its regular expression search will use that syntax table when
+It copies `text-mode-syntax-table' (which `wcheck-mode' uses by
+default) and sets the syntactic meaning of the ASCII hyphen
+character (-) to a word character (\"w\"). `wcheck-mode' and its
+regular expression search will use that syntax table when
 scanning buffers' content in that language.
 
 Below is an example on how to add an \"Add to dictionary\"
 feature to the actions menu, among spelling suggestions. First,
-there's the language configuration. The following example is
-similar to the \"British English\" configuration above except
-that `action-parser' function is a bit more complicated. It's a
-lambda expression which calls `wcheck-parser-ispell-suggestions'
-and then adds \"Add to dictionary\" option in the front of the
+there's the language configuration. The example is similar to the
+\"British English\" configuration above except that
+`action-parser' function is a bit more complicated. It's a lambda
+expression which calls `wcheck-parser-ispell-suggestions' and
+then adds \"Add to dictionary\" option in the front of the
 spelling suggestions list. Choosing that option from the actions
 menu will call function add-word-to-dictionary (which doesn't
 exist yet).
@@ -623,11 +623,14 @@ Then write code that adds a new string to the dictionary.
     (defun add-word-to-dictionary (marked-text)
       ;; MARKED-TEXT is a vector returned by
       ;; `wcheck-marked-text-at' function.
+
       (let ((word (aref marked-text 0))
             (language (aref marked-text 4)))
+
         ;; Do the actual job here. That is, write code that adds
         ;; the string stored in variable \"word\" to the
         ;; appropriate dictionary.
+
         (message \"Added word \\\"%s\\\" to the %s dictionary\"
                  word language)))
 
@@ -675,7 +678,7 @@ other major modes FIXMEs are marked everywhere.
 
 The following example adds a language \"email\" for highlighting
 email addresses from buffer and creating an action menu which has
-option to start composing mail to that address. First, here's the
+option to start composing mail to that address. Here's the
 language configuration:
 
     (\"email\"
@@ -705,7 +708,7 @@ Then the needed functions:
 
 Note that detecting all valid email addresses is difficult and a
 much more advanced parser is needed for that. Feel free to
-replace the above detection function with a better one."
+replace the detection function with a better one."
 
   :group 'wcheck
   :type
