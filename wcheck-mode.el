@@ -334,9 +334,10 @@ regexp-end
 
     You can't use grouping constructs `\\( ... \\)' in
     `regexp-start' because the back reference `\\1' is used for
-    separating the body string from the start and end match. You
-    can use \"shy\" groups `\\(?: ... \\)' which do not record
-    the matched substring. Grouping constructs `\\( ... \\)' are
+    separating the `regexp-body' match string from the
+    `regexp-start' and `regexp-end' match strings. You can use
+    \"shy\" groups `\\(?: ... \\)' which do not record the
+    matched substring. Grouping constructs `\\( ... \\)' are
     allowed in `regexp-body' and `regexp-end'. Just note that the
     first group and back reference \\1 is already taken.
 
