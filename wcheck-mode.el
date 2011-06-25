@@ -694,9 +694,9 @@ language configuration:
     (\"email\"
      (program . email-address-detect)
      (face . highlight)
-     (regexp-start . \"\")
+     (regexp-start . \"\\\\=\\<\")
      (regexp-body . \"\\\\S-+@\\\\S-+\")
-     (regexp-end . \"\")
+     (regexp-end . \"\\\\=\\>\")
      (action-program . email-action-menu)
      (read-or-skip-faces
       (nil)))
@@ -707,8 +707,7 @@ Then the needed functions:
       (let (addresses)
         (dolist (string strings addresses)
           (when (string-match \"\
-\\\\=\\<[a-z.-]+\\\\=\\>@\\\\=\\<[a-z.-]+\\\\=\\>\"
-                              string)
+\\\\=\\<[a-z.-]+\\\\=\\>@\\\\=\\<[a-z.-]+\\\\=\\>\" string)
             (push (match-string-no-properties 0 string) addresses)))))
 
     (defun email-action-menu (marked-text)
