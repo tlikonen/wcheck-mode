@@ -43,10 +43,10 @@ output, decides if some parts of text should be marked in the buffer.
 Features
 --------
 
-User can have several different configuration units which are called
+In Wcheck mode's configuration different configuration units are called
 "languages". In terms of spelling checker it is natural to think of them
-as different human languages. That's not the only point of view, though.
-In Wcheck mode language is just a configuration unit for certain kind of
+as different human languages. That's only one point of view, though. In
+Wcheck mode language is just a configuration unit for certain kind of
 text checking purpose.
 
 Each language can use its own checker engine (external program or a
@@ -58,10 +58,10 @@ used to mark text elements in buffer.
 User can create language-specific and major mode specific settings
 defining which "faces" to read or skip in buffers. A typical use for
 this feature is to spell-check only those areas in buffer which are
-written in human language. For example, in email messages usually the
-message body and Subject header are important enough to spell-check. In
-programming modes user could spell-check only documentation strings and
-comments (or the opposite if you want to use Wcheck mode to check
+written in the target language. For example, in email messages usually
+the message body and Subject header are important enough to spell-check.
+In programming modes user could spell-check only documentation strings
+and comments (or the opposite if you want to use Wcheck mode to check
 keywords and syntax of the programming language itself).
 
 Wcheck mode can also be configured to offer any kind of actions for
@@ -73,17 +73,17 @@ or (2) executing interactive command `wcheck-actions' while the cursor
 If you use `wcheck-mode' as a spelling checker then it's natural to
 configure an action menu that offers spelling suggestions for the
 misspelled word. The action menu could also have an option to add the
-word to spell-checker's dictionary, so that the word is recognized next
-time. That's only one application for Wcheck mode, though. Wcheck mode
-can be configured to find almost any kind of text elements from buffer,
-highlight them, and offer any kind of actions for them.
+word to spell-checker's dictionary, so that the word is recognized in
+the future. That's only one application for Wcheck mode, though. Wcheck
+mode can be configured to find almost any kind of text elements from
+buffer, mark them, and offer any kind of actions for marked text.
 
 
 How does it compare to other spell-checkers?
 --------------------------------------------
 
 The open design makes Wcheck mode (internally) quite different from
-spell-checkers like flyspell-mode and speck-mode. They are specific
+spell-checkers like Flyspell mode and Speck mode. They are specific
 tools for spell-checking through Ispell or compatible program and are
 therefore very much tied to Ispell's features and command-line
 interface. This can be useful if you want to use Ispell or fully
@@ -93,7 +93,7 @@ be other kind of text-checking needs.
 
 The motivation behind Wcheck mode is to offer more general-purpose and
 configurable interface for text checking. It can be configured to work
-with almost anything: user's custom shell, awk or perl scripts, Lisp
+with almost anything: user's custom shell, Awk or Perl scripts, Lisp
 functions or other checkers and text filters. Even if you only need a
 spelling checker for human languages Wcheck mode can be a good choice.
 It has more configuration possibilities than other spell-checkers and
@@ -112,7 +112,7 @@ and add the following lines to Emacs's initialization file (~/.emacs):
     (autoload 'wcheck-change-language "wcheck-mode"
       "Switch wcheck-mode languages." t)
     (autoload 'wcheck-actions "wcheck-mode"
-      "Open the action menu." t)
+      "Open actions menu." t)
     (autoload 'wcheck-jump-forward "wcheck-mode"
       "Move point forward to next marked text area." t)
     (autoload 'wcheck-jump-backward "wcheck-mode"
