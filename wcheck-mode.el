@@ -33,7 +33,7 @@
 ;;     (autoload 'wcheck-change-language "wcheck-mode"
 ;;       "Switch wcheck-mode languages." t)
 ;;     (autoload 'wcheck-actions "wcheck-mode"
-;;       "Open the action menu." t)
+;;       "Open actions menu." t)
 ;;     (autoload 'wcheck-jump-forward "wcheck-mode"
 ;;       "Move point forward to next marked text area." t)
 ;;     (autoload 'wcheck-jump-backward "wcheck-mode"
