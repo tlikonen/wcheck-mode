@@ -637,7 +637,7 @@ Then write code that adds a new string to the dictionary.
       (let ((word (aref marked-text 0))
             (language (aref marked-text 4)))
 
-        ;; Do the actual job here. That is, write code that adds
+        ;; Do the actual work here. That is, write code that adds
         ;; the string stored in variable \"word\" to the
         ;; appropriate dictionary.
 
