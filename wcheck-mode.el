@@ -392,7 +392,7 @@ read-or-skip-faces
     the FACEs should be read or skipped. If it's `read' then only
     the listed faces are read. If it's `skip' then the listed
     faces are skipped and all other faces are read. If
-    OPERATION-MODE is nil (or if it doesn't exist at all) then
+    OPERATION-MODE is nil or it doesn't exist at all then
     everything is read.
 
     The rest of the items are FACEs. They are typically symbols
@@ -408,7 +408,7 @@ read-or-skip-faces
          ((emacs-lisp-mode c-mode) read
           font-lock-comment-face font-lock-doc-face)
          (org-mode skip font-lock-comment-face org-link)
-         (text-mode nil)
+         (text-mode)
          (nil read nil))
 
     It says that in `emacs-lisp-mode' and `c-mode' only the text
@@ -417,21 +417,17 @@ read-or-skip-faces
     faces `font-lock-comment-face' and `org-link' are
     skipped (i.e., not checked) and all other faces are read. In
     `text-mode' everything is read. Finally, in all other major
-    modes only the normal text is read.
+    modes only the normal text (nil) is read.
 
-    Most likely not all of `read-or-skip-faces' settings are
-    specific to a certain language so it could be more useful to
-    put them in variable `wcheck-language-data-defaults' instead.
-    That way they are used with all languages. Normally the
-    global default is equivalent to
+    The global default is equivalent to
 
         (read-or-skip-faces
-         (nil nil))
+         (nil))
 
     which means that in all major modes read everything. It is
     sometimes useful to have this setting in language-specific
     options because the parsing stops right there. Therefore it
-    overrides all global settings which may have been changed
+    overrides all global settings which user may have changed
     with variable `wcheck-language-data-defaults'.
 
     Note: You can use command `\\[what-cursor-position]' with a
@@ -664,7 +660,7 @@ It replaces the original whitespace string with empty string.
      (regexp-end . \"$\")
      (regexp-discard . \"\")
      (read-or-skip-faces
-      (nil nil)))
+      (nil)))
 
 Sometimes it's useful to highlight only a small number of
 keywords in buffer. The following example adds a language called
@@ -684,7 +680,7 @@ other major modes FIXMEs are marked everywhere.
       (face . highlight)
       (read-or-skip-faces
        ((emacs-lisp-mode c-mode) read font-lock-comment-face)
-       (nil nil)))
+       (nil)))
 
 The following example adds a language \"email\" for highlighting
 email addresses from buffer and creating an action menu which has
@@ -699,7 +695,7 @@ language configuration:
      (regexp-end . \"\\\\=\\>\")
      (action-program . email-action-menu)
      (read-or-skip-faces
-      (nil nil)))
+      (nil)))
 
 Then the needed functions:
 
