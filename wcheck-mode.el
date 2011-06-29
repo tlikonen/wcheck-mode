@@ -1067,7 +1067,7 @@ area.
 A note for Emacs Lisp programmers: Emacs Lisp function
 `wcheck-marked-text-at' returns information about marked text at
 a buffer position. Function `wcheck-query-language-data' can be
-used for querying effective configuration data for a language."
+used for querying effective configuration data for any language."
 
   :init-value nil
   :lighter (" W:" (:eval (wcheck-mode-line-lang)))

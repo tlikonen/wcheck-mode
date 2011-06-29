@@ -123,6 +123,12 @@ languages and command `wcheck-actions' (or the right mouse button) opens
 an actions menu for marked text. Commands `wcheck-jump-forward' and
 `wcheck-jump-backward' jump to next or previous marked text area.
 
+A note for Emacs Lisp programmers: Emacs Lisp function
+`wcheck-marked-text-at' returns information about marked text at a
+buffer position. Programmers can use it to perform any kind of actions
+for marked text. Function `wcheck-query-language-data' can be used for
+querying effective configuration data for any language.
+
 
 Examples
 --------
