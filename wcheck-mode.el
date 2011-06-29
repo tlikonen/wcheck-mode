@@ -1,6 +1,5 @@
-;;; wcheck-mode.el --- General interface for text checkers
+;;; wcheck-mode.el --- A general interface for text checkers
 
-;; Copyright (C) 2009-2011 Teemu Likonen <tlikonen@iki.fi>
 
 ;; Author: Teemu Likonen <tlikonen@iki.fi>
 ;; Maintainer: Teemu Likonen <tlikonen@iki.fi>
@@ -9,6 +8,8 @@
 ;; Keywords: text spell check languages ispell
 
 
+;; Copyright (C) 2009-2011 Teemu Likonen <tlikonen@iki.fi>
+;;
 ;; This program is free software: you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
 ;; the Free Software Foundation, either version 3 of the License, or (at
@@ -19,8 +20,7 @@
 ;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
 ;; General Public License for more details.
 ;;
-;; You should have received a copy of the GNU General Public License
-;; along with GNU Emacs. If not, see <http://www.gnu.org/licenses/>.
+;; The license text: <http://www.gnu.org/licenses/gpl-3.0.html>
 
 
 ;; INSTALLATION
@@ -45,17 +45,22 @@
 
 ;;; Commentary:
 ;;
-;; General interface for text checkers
+;; A general interface for text checkers
 ;;
-;; Wcheck is a minor mode for automatically checking and marking strings
-;; in Emacs buffer. Wcheck sends (parts of) buffer's content to a
-;; text-checker back-end and, based on its output, decides if some parts
-;; of text should be marked.
+;; Wcheck mode is a general-purpose text-checker interface for Emacs
+;; text editor. Wcheck mode a minor mode which provides an on-the-fly
+;; text checker. It checks the visible text area, as you type, and
+;; possibly highlights some parts of it. What is checked and how are all
+;; configurable.
 ;;
-;; Wcheck can be used with external spell-checker programs such as
-;; Ispell, Aspell and Enchant, but actually any tool that can receive
-;; text stream from standard input and send text to standard output can
-;; be used. The checker back-end can also be an Emacs Lisp function.
+;; Wcheck mode can use external programs or Emacs Lisp functions for
+;; checking text. For example, Wcheck mode can be used with
+;; spell-checker programs such as Ispell, Enchant and Hunspell, but
+;; actually any tool that can receive text from standard input stream
+;; and send text to standard output can be used. Wcheck mode sends parts
+;; of buffer's content to an external program or an Emacs Lisp function
+;; and, based on their output, decides if some parts of text should be
+;; marked in the buffer.
 
 
 ;;; Code:
@@ -1050,12 +1055,11 @@ receive text stream from standard input and send text to standard
 output can be used. The checker back-end can also be an Emacs
 Lisp function.
 
-In Wcheck mode different configuration units are called
-\"languages\". See the documentation of variables
-`wcheck-language-data', `wcheck-language-data-defaults' and
-`wcheck-language' for information on how to configure Wcheck
-mode. You can access the variables through customize group
-`wcheck'.
+Different configuration units are called \"languages\". See the
+documentation of variables `wcheck-language-data',
+`wcheck-language-data-defaults' and `wcheck-language' for
+information on how to configure Wcheck mode. You can access and
+configure the variables through customize group `wcheck'.
 
 Interactive command `wcheck-change-language' is used to switch
 languages. Command `wcheck-actions' gives an action menu for the

@@ -5,10 +5,11 @@ Wcheck mode
 Introduction
 ------------
 
-Wcheck mode is a general-purpose text-checker interface for Emacs.
-Technically it's a minor mode which provides an on-the-fly text checker.
-It checks the visible text area as you type and possibly highlights some
-parts of it. What is checked and how, are all configurable.
+Wcheck mode is a general-purpose text-checker interface for Emacs text
+editor. Wcheck mode a minor mode which provides an on-the-fly text
+checker. It checks the visible text area, as you type, and possibly
+highlights some parts of it. What is checked and how are all
+configurable.
 
 Wcheck mode can use external programs or Emacs Lisp functions for
 checking text. For example, Wcheck mode can be used with spell-checker
@@ -23,10 +24,10 @@ Features
 --------
 
 In Wcheck mode's configuration different configuration units are called
-"languages". In terms of spelling checker it is natural to think of them
-as different human languages. That's only one point of view, though. In
-Wcheck mode language is just a configuration unit for certain kind of
-text checking purpose.
+"languages". In terms of a spelling checker it is natural to think of
+them as different human languages. Wcheck mode is not limited to that,
+though. Language is just a configuration unit for certain kind of text
+checking purpose.
 
 Each language can use its own checker engine (external program or a
 function), command-line arguments and other settings, such as the
@@ -49,13 +50,14 @@ activated either by (1) clicking the right mouse button on a marked text
 or (2) executing interactive command `wcheck-actions' while the cursor
 (the point) is on a marked text.
 
-If you use `wcheck-mode' as a spelling checker then it's natural to
+If you use Wcheck mode as a spelling checker then it's natural to
 configure an action menu that offers spelling suggestions for the
 misspelled word. The action menu could also have an option to add the
-word to spell-checker's dictionary, so that the word is recognized in
-the future. That's only one application for Wcheck mode, though. Wcheck
-mode can be configured to find almost any kind of text elements from
-buffer, mark them, and offer any kind of actions for marked text.
+marked word to spell-checker's dictionary, so that the word is
+recognized in the future. That's only one application for Wcheck mode,
+though. Wcheck mode can be configured to find almost any kind of text
+elements from buffer, mark them, and offer any kind of actions for
+marked text.
 
 
 How does it compare to other spell-checkers?
@@ -103,10 +105,10 @@ Configuration and basic usage
 
 The internal documentation of variable `wcheck-language-data' has a
 complete description on how to configure Wcheck mode language data. For
-easy configuration you can use the options in customize group named
+easy configuration you can use the options in the customize group named
 "wcheck" (M-x customize-group RET wcheck RET).
 
-It might be convenient if Wcheck mode commands are bound to some easily
+It might be convenient to bind Wcheck mode commands to some easily
 accessible keys, for example:
 
     (global-set-key (kbd "C-c s") 'wcheck-mode)
