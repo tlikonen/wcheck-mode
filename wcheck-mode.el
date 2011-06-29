@@ -388,10 +388,10 @@ read-or-skip-faces
     MAJOR-MODE to define default settings. Settings that come
     after the pseudo major-mode nil are ignored.
 
-    OPERATION-MODE is symbol `read', `skip' or nil, defining
-    whether the FACEs should be read or skipped. If it's `read'
-    then only the listed faces are read. If it's `skip' then the
-    listed faces are skipped and all other faces are read. If
+    OPERATION-MODE is symbol `read' or `skip' defining whether
+    the FACEs should be read or skipped. If it's `read' then only
+    the listed faces are read. If it's `skip' then the listed
+    faces are skipped and all other faces are read. If
     OPERATION-MODE is nil (or if it doesn't exist at all) then
     everything is read.
 
