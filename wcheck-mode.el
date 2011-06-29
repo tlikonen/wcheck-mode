@@ -88,15 +88,6 @@
     (cons :tag "Arguments" :format "%v"
           (const :format "" args)
           (repeat :tag "Arguments"
-                  :value-to-internal
-                  (lambda (widget value)
-                    (cond ((stringp value)
-                           (split-string-and-unquote value "[ \t\n]+"))
-                          ((listp value)
-                           value)))
-                  :match (lambda (widget value)
-                           (or (listp value)
-                               (stringp value)))
                   (string :format "%v")))
 
     (cons :tag "Output parser function" :format "%v"
