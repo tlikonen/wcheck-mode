@@ -700,7 +700,8 @@ language configuration:
 Then the needed functions:
 
     (defun email-address-detect (strings)
-      (let (addresses)
+      (let ((case-fold-search t)
+            addresses)
         (dolist (string strings addresses)
           (when (string-match \"\
 \\\\=\\<[a-z.-]+\\\\=\\>@\\\\=\\<[a-z.-]+\\\\=\\>\" string)
