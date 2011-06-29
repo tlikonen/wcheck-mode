@@ -238,7 +238,7 @@ string with empty string.
      (regexp-end . "$")
      (regexp-discard . "")
      (read-or-skip-faces
-      (nil)))
+      (nil nil)))
 
 Sometimes it's useful to highlight only a small number of keywords in
 buffer. The following example adds a language called "Highlight FIXMEs"
@@ -257,7 +257,7 @@ modes FIXMEs are marked everywhere.
       (face . highlight)
       (read-or-skip-faces
        ((emacs-lisp-mode c-mode) read font-lock-comment-face)
-       (nil)))
+       (nil nil)))
 
 The following example adds a language "email" for highlighting email
 addresses from buffer and creating an action menu which has option to
@@ -271,7 +271,7 @@ start composing mail to that address. Here's the language configuration:
      (regexp-end . "\\>")
      (action-program . email-action-menu)
      (read-or-skip-faces
-      (nil)))
+      (nil nil)))
 
 Then the needed functions:
 
