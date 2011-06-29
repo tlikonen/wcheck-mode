@@ -4,7 +4,7 @@
 ;; Author: Teemu Likonen <tlikonen@iki.fi>
 ;; Maintainer: Teemu Likonen <tlikonen@iki.fi>
 ;; Created: 2009-07-04
-;; Version: 2011.02.20
+;; Version: 2011.06.29
 ;; Keywords: text spell check languages ispell
 
 
