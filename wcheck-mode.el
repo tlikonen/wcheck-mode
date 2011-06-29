@@ -391,9 +391,9 @@ read-or-skip-faces
     OPERATION-MODE is symbol `read' or `skip' defining whether
     the FACEs should be read or skipped. If it's `read' then only
     the listed faces are read. If it's `skip' then the listed
-    faces are skipped and all other faces are read. If
-    OPERATION-MODE is nil or it doesn't exist at all then
-    everything is read.
+    faces are skipped and all other faces are read. If there is
+    no OPERATION-MODE at all (i.e., the list has just one
+    element, MAJOR-MODE) then everything is read.
 
     The rest of the items are FACEs. They are typically symbols
     but some Emacs modes may use strings, property lists or cons
@@ -418,6 +418,12 @@ read-or-skip-faces
     skipped (i.e., not checked) and all other faces are read. In
     `text-mode' everything is read. Finally, in all other major
     modes only the normal text (nil) is read.
+
+    Most likely not all `read-or-skip-faces' settings are
+    specific to a certain language so it could be more useful to
+    put them in variable `wcheck-language-data-defaults' instead.
+    That way they are used with all languages. Normally the
+    global default is equivalent to
 
     The global default is equivalent to
 
