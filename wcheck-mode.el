@@ -425,8 +425,6 @@ read-or-skip-faces
     That way they are used with all languages. Normally the
     global default is equivalent to
 
-    The global default is equivalent to
-
         (read-or-skip-faces
          (nil))
 
