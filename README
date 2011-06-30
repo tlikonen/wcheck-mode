@@ -305,7 +305,7 @@ The source code repository
 
 The branch named "master" is the release branch and it should always be
 safe to use. New features and experimental code are developed in other
-branches and then possibly merged to "master" when they are ready.
+branches and possibly merged to "master" when they are ready.
 
 
 Copyright and license
