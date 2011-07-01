@@ -612,7 +612,7 @@ there's the language configuration. The example is similar to the
 expression which calls `wcheck-parser-ispell-suggestions' and
 then adds \"Add to dictionary\" option in the front of the
 spelling suggestions list. Choosing that option from the actions
-menu will call function add-word-to-dictionary (which doesn't
+menu will call function `add-word-to-dictionary' (which doesn't
 exist yet).
 
     (\"British English\"
@@ -625,10 +625,11 @@ exist yet).
                                     'add-word-to-dictionary)
                               (wcheck-parser-ispell-suggestions)))))
 
-Now we need to define the function add-word-to-dictionary. Below
-is an incomplete example. To make it complete you'll have to find
-out how and where your spelling checker stores user dictionaries.
-Then write code that adds a new string to the dictionary.
+Now we need to define the function `add-word-to-dictionary'.
+Below is an incomplete example. To make it complete you'll have
+to find out how and where your spelling checker stores user
+dictionaries. Then write code that adds a new string to the
+dictionary.
 
     (defun add-word-to-dictionary (marked-text)
       ;; MARKED-TEXT is a vector returned by

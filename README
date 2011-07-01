@@ -192,7 +192,7 @@ configuration above except that `action-parser' function is a bit more
 complicated. It's a lambda expression which calls
 `wcheck-parser-ispell-suggestions' and then adds "Add to dictionary"
 option in the front of the spelling suggestions list. Choosing that
-option from the actions menu will call function add-word-to-dictionary
+option from the actions menu will call function `add-word-to-dictionary'
 (which doesn't exist yet).
 
     ("British English"
@@ -205,7 +205,7 @@ option from the actions menu will call function add-word-to-dictionary
                                     'add-word-to-dictionary)
                               (wcheck-parser-ispell-suggestions)))))
 
-Now we need to define the function add-word-to-dictionary. Below is an
+Now we need to define the function `add-word-to-dictionary'. Below is an
 incomplete example. To make it complete you'll have to find out how and
 where your spelling checker stores user dictionaries. Then write code
 that adds a new string to the dictionary.
