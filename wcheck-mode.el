@@ -134,6 +134,9 @@
     (cons :tag "Regexp case" :format "%v"
           (const :tag "Regexp" :format "%t: " case-fold)
           (choice :format "%[Case%] %v" :value nil
+                  :match (lambda (widget value) t)
+                  :value-to-internal (lambda (widget value)
+                                       (if value t nil))
                   (const :tag "sensitive" nil)
                   (const :tag "insensitive" t)))
 
