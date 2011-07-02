@@ -530,8 +530,8 @@ action-parser
 action-autoselect
     If this option is non-nil and the action menu has only one
     menu item then the item is chosen automatically without
-    actually showing the menu. If this option is nil then the
-    menu is always shown.
+    actually showing the menu. If this option is nil (which is
+    the default) then the menu is always shown.
 
 
 The return value of `action-program' function and `action-parser'
