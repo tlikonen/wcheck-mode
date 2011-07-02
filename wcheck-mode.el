@@ -211,13 +211,12 @@ LANGUAGE is a name string for this particular configuration unit
 and KEY and VALUE pairs denote settings for the language.
 
 Below is the documentation of possible KEYs and corresponding
-VALUEs. The documentation is divided in three parts: (1) checker
-options, (2) action options and (3) examples. The first part
-describes all options related to checking (and possibly marking
-some of) the content of an Emacs buffer. The second part
-describes options which configure actions which user can choose
-for a marked text on buffer. The third part gives configuration
-examples to help you get `wcheck-mode' going.
+VALUEs. The documentation is divided in two parts: checker
+options and action options. The first part describes all options
+related to checking the content of an Emacs buffer (and possibly
+marking some of it). The second part describes options which
+configure actions which user can choose for a marked text on
+buffer.
 
 NOTE: There is also variable `wcheck-language-data-defaults'
 which is used to define default values. The defaults are used
@@ -226,7 +225,7 @@ not exist or is not valid.
 
 
 Checker options
-===============
+---------------
 
 The checker options configure LANGUAGE's text-checking and
 text-marking features. With these you can configure how buffer's
@@ -444,7 +443,7 @@ read-or-skip-faces
 
 
 Action options
-==============
+--------------
 
 \"Actions\" are any kind of operations that can be executed for
 marked text in an Emacs buffer. Actions are presented to user
@@ -518,6 +517,7 @@ action-parser
         `wcheck-parser-whitespace'. Each whitespace-separated
         token in the program's output is a separate suggestion.
 
+
 The return value of `action-program' function and `action-parser'
 function must be a list. The empty list (nil) means that there
 are no actions available for the marked text. Otherwise each
@@ -550,179 +550,8 @@ any kind of useful actions by calling custom functions. There are
 a lot of possibilities.
 
 
-Examples
-========
-
-Here are some examples on how you can fill the
-`wcheck-language-data' variable. The value is a list of language
-configurations:
-
-    (setq wcheck-language-data
-          '((\"language\"
-             ...)
-            (\"another language\"
-             ...)))
-
-Perhaps the most common use for `wcheck-mode' is to spell-check
-human languages with Ispell (or compatible) spelling checker.
-Let's start with examples on how to configure that.
-
-The following settings configure two languages which are named
-\"British English\" and \"Finnish\". The former language uses
-Ispell program as the spell-checker engine. The latter uses
-Enchant which has an Ispell-compatible command-line interface.
-Both languages use `wcheck-mode's actions feature to offer
-spelling suggestions for misspelled words. Since both spelling
-checkers print spelling suggestions in the Ispell format we use
-built-in function `wcheck-parser-ispell-suggestions' to parse the
-output and populate the actions (spelling suggestions) menu for
-user.
-
-    (\"British English\"
-     (program . \"/usr/bin/ispell\")
-     (args \"-l\" \"-d\" \"british\")
-     (action-program . \"/usr/bin/ispell\")
-     (action-args \"-a\" \"-d\" \"british\")
-     (action-parser . wcheck-parser-ispell-suggestions))
-
-    (\"Finnish\"
-     (program . \"/usr/bin/enchant\")
-     (args  \"-l\" \"-d\" \"fi\")
-     (syntax . my-finnish-syntax-table)
-     (action-program . \"/usr/bin/enchant\")
-     (action-args \"-a\" \"-d\" \"fi\")
-     (action-parser . wcheck-parser-ispell-suggestions))
-
-The \"Finnish\" language above used a special syntax table called
-my-finnish-syntax-table. It could be defined like this:
-
-    (defvar my-finnish-syntax-table
-      (copy-syntax-table text-mode-syntax-table))
-
-    (modify-syntax-entry ?- \"w\" my-finnish-syntax-table)
-
-It copies `text-mode-syntax-table' (which `wcheck-mode' uses by
-default) and sets the syntactic meaning of the ASCII hyphen
-character (-) to a word character (\"w\"). `wcheck-mode' and its
-regular expression search will use that syntax table when
-scanning buffers' content in that language.
-
-Below is an example on how to add an \"Add to dictionary\"
-feature to the actions menu, among spelling suggestions. First,
-there's the language configuration. The example is similar to the
-\"British English\" configuration above except that
-`action-parser' function is a bit more complicated. It's a lambda
-expression which calls `wcheck-parser-ispell-suggestions' and
-then adds \"Add to dictionary\" option in the front of the
-spelling suggestions list. Choosing that option from the actions
-menu will call function `add-word-to-dictionary' (which doesn't
-exist yet).
-
-    (\"British English\"
-     (program . \"/usr/bin/ispell\")
-     (args \"-l\" \"-d\" \"british\")
-     (action-program . \"/usr/bin/ispell\")
-     (action-args \"-a\" \"-d\" \"british\")
-     (action-parser . (lambda (marked-text)
-                        (cons (cons \"[Add to dictionary]\"
-                                    'add-word-to-dictionary)
-                              (wcheck-parser-ispell-suggestions)))))
-
-Now we need to define the function `add-word-to-dictionary'.
-Below is an incomplete example. To make it complete you'll have
-to find out how and where your spelling checker stores user
-dictionaries. Then write code that adds a new string to the
-dictionary.
-
-    (defun add-word-to-dictionary (marked-text)
-      ;; MARKED-TEXT is a vector returned by
-      ;; `wcheck-marked-text-at' function.
-
-      (let ((word (aref marked-text 0))
-            (language (aref marked-text 4)))
-
-        ;; Do the actual work here. That is, write code that adds
-        ;; the string stored in variable \"word\" to the
-        ;; appropriate dictionary.
-
-        (message \"Added word \\\"%s\\\" to the %s dictionary\"
-                 word language)))
-
-Spell-checking human languages is not the only application for
-`wcheck-mode'. The following configuration adds language called
-\"Trailing whitespace\" which finds and marks all trailing
-whitespace characters (spaces and tabs) on buffer's lines. It
-uses regular expressions to match the whitespace. The checker
-program is the Emacs Lisp function `identity' which just returns
-its argument unchanged. The `action-program' feature is used to
-build an action menu with just one option: remove the whitespace.
-It replaces the original whitespace string with empty string.
-
-    (\"Trailing whitespace\"
-     (program . identity)
-     (action-program . (lambda (marked-text)
-                         (list (cons \"Remove whitespace\" \"\"))))
-     (face . highlight)
-     (regexp-start . \"\")
-     (regexp-body . \"[ \\t]+\")
-     (regexp-end . \"$\")
-     (regexp-discard . \"\")
-     (read-or-skip-faces
-      (nil)))
-
-Sometimes it's useful to highlight only a small number of
-keywords in buffer. The following example adds a language called
-\"Highlight FIXMEs\" to mark \"FIXME\" words. FIXME is some
-programmers' convention to put reminders in source code that some
-parts are not complete yet and will be fixed or completed later.
-In source code files such keywords are written in program's
-comments only, not in the actual code, so we use
-`read-or-skip-faces' feature to scan only the comments. This
-example configures it for `emacs-lisp-mode' and `c-mode'. In all
-other major modes FIXMEs are marked everywhere.
-
-     (\"Highlight FIXMEs\"
-      (program . (lambda (strings)
-                   (when (member \"FIXME\" strings)
-                     (list \"FIXME\"))))
-      (face . highlight)
-      (read-or-skip-faces
-       ((emacs-lisp-mode c-mode) read font-lock-comment-face)
-       (nil)))
-
-The following example adds a language \"email\" for highlighting
-email addresses from buffer and creating an action menu which has
-option to start composing mail to that address. Here's the
-language configuration:
-
-    (\"email\"
-     (program . email-address-detect)
-     (face . highlight)
-     (regexp-start . \"\\\\=\\<\")
-     (regexp-body . \"\\\\S-+@\\\\S-+\")
-     (regexp-end . \"\\\\=\\>\")
-     (action-program . email-action-menu)
-     (read-or-skip-faces
-      (nil)))
-
-Then the needed functions:
-
-    (defun email-address-detect (strings)
-      (let ((case-fold-search t)
-            addresses)
-        (dolist (string strings addresses)
-          (when (string-match \"\
-\\\\=\\<[a-z.-]+\\\\=\\>@\\\\=\\<[a-z.-]+\\\\=\\>\" string)
-            (push (match-string-no-properties 0 string) addresses)))))
-
-    (defun email-action-menu (marked-text)
-      (list (cons (concat \"Mail to <\" (aref marked-text 0) \">\")
-                  (lambda (marked-text)
-                    (compose-mail (aref marked-text 0))))))
-
-Note that detecting all valid email addresses is difficult and a
-much more advanced parser is needed for that. Feel free to
-replace the detection function with a better one."
+For configuration examples, see the README file in URL
+`https://raw.github.com/tlikonen/wcheck-mode/1cf57d0ef6f/README'."
 
   :group 'wcheck
   :type
