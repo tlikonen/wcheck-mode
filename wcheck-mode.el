@@ -1825,18 +1825,20 @@ any kind of actions, though."
       (let ((marked-text (or (wcheck-marked-text-at pos)
                              (wcheck-marked-text-at (1- pos))))
             (return-value nil))
+
         (if (not marked-text)
             (signal 'wcheck-action-error "There is no marked text here")
           (let* ((start (copy-marker (aref marked-text 1)))
                  (end (copy-marker (aref marked-text 2)))
                  (actions (wcheck-get-actions marked-text))
-                 (choice (if (and (wcheck-query-language-data
-                                   (aref marked-text 4) 'action-autoselect)
-                                  (= 1 (length actions)))
-                             (cdr (car actions))
-                           (if (and (display-popup-menus-p) event)
-                               (wcheck-choose-action-popup actions event)
-                             (wcheck-choose-action-minibuffer actions)))))
+                 (choice (cond ((and (null (cdr actions))
+                                     (wcheck-query-language-data
+                                      (aref marked-text 4) 'action-autoselect))
+                                (cdar actions))
+                               ((and event (display-popup-menus-p))
+                                (wcheck-choose-action-popup actions event))
+                               (t (wcheck-choose-action-minibuffer actions)))))
+
             (cond ((and (stringp choice)
                         (markerp start)
                         (markerp end))
@@ -1850,6 +1852,7 @@ any kind of actions, though."
                   ((functionp choice)
                    (funcall choice marked-text)
                    (setq return-value choice)))
+
             (if (markerp start) (set-marker start nil))
             (if (markerp end) (set-marker end nil))))
         return-value)
