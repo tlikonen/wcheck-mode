@@ -1,9 +1,22 @@
-Wcheck mode
-===========
+Wcheck mode - a general interface for text checkers
+===================================================
 
 
-Introduction
-------------
+Contents
+--------
+
+ 1  Introduction
+ 2  Features
+ 3  How does it compare to other spell-checkers?
+ 4  Install
+ 5  Configuration and basic usage
+ 6  Examples
+ 7  The source code repository
+ 8  Copyright and license
+
+
+1  Introduction
+---------------
 
 Wcheck mode is a general-purpose text-checker interface for Emacs text
 editor. Wcheck mode a minor mode which provides an on-the-fly text
@@ -20,8 +33,8 @@ to an external program or an Emacs Lisp function and, based on their
 output, decides if some parts of text should be marked in the buffer.
 
 
-Features
---------
+2  Features
+-----------
 
 In Wcheck mode's configuration different configuration units are called
 "languages". In terms of a spelling checker it is natural to think of
@@ -60,8 +73,8 @@ elements from buffer, mark them, and offer any kind of actions for
 marked text.
 
 
-How does it compare to other spell-checkers?
---------------------------------------------
+3  How does it compare to other spell-checkers?
+-----------------------------------------------
 
 The open design makes Wcheck mode (internally) quite different from
 spell-checkers like Flyspell mode and Speck mode. They are specific
@@ -82,8 +95,8 @@ the on-the-fly checker performs very well. It's a true real-time
 checker.
 
 
-Install
--------
+4  Install
+----------
 
 Put wcheck-mode.el file to some directory in your Emacs's `load-path'
 and add the following lines to Emacs's initialization file (~/.emacs):
@@ -100,8 +113,8 @@ and add the following lines to Emacs's initialization file (~/.emacs):
       "Move point backward to previous marked text area." t)
 
 
-Configuration and basic usage
------------------------------
+5  Configuration and basic usage
+--------------------------------
 
 The internal documentation of variable `wcheck-language-data' has a
 complete description on how to configure Wcheck mode language data. For
@@ -130,8 +143,8 @@ for marked text. Function `wcheck-query-language-data' can be used for
 querying effective configuration data for any language.
 
 
-Examples
---------
+6  Examples
+-----------
 
 Here are some examples on how you can fill the `wcheck-language-data'
 variable. The value is a list of language configurations:
@@ -298,8 +311,8 @@ more advanced parser is needed for that. Feel free to replace the
 detection function with a better one.
 
 
-The source code repository
---------------------------
+7  The source code repository
+-----------------------------
 
 <https://github.com/tlikonen/wcheck-mode>
 
@@ -308,8 +321,8 @@ safe to use. New features and experimental code are developed in other
 branches and possibly merged to "master" when they are ready.
 
 
-Copyright and license
----------------------
+8  Copyright and license
+-------------------------
 
 Copyright (C) 2009-2011 Teemu Likonen <tlikonen@iki.fi>
 
