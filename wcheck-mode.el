@@ -195,7 +195,16 @@
                   (const :tag "Lines" wcheck-parser-lines)
                   (const :tag "Whitespace" wcheck-parser-whitespace)
                   (function :tag "Custom function"
-                            :format "%t:\n\t\t%v")))))
+                            :format "%t:\n\t\t%v")))
+
+    (cons :tag "Action autoselect mode" :format "%v"
+          (const :tag "Action autoselect" :format "%t: " action-autoselect)
+          (choice :format "%[Mode%] %v" :value nil
+                  :match (lambda (widget value) t)
+                  :value-to-internal (lambda (widget value)
+                                       (if value t nil))
+                  (const :tag "off" nil)
+                  (const :tag "on" t)))))
 
 
 ;;;###autoload
@@ -518,6 +527,13 @@ action-parser
         `wcheck-parser-whitespace'. Each whitespace-separated
         token in the program's output is a separate suggestion.
 
+action-autoselect
+    If this option is non-nil and the action menu has only one
+    menu item then the item is chosen automatically without
+    actually showing the menu. If this option is nil then the
+    menu is always shown.
+
+
 The return value of `action-program' function and `action-parser'
 function must be a list. The empty list (nil) means that there
 are no actions available for the marked text. Otherwise each
@@ -745,7 +761,8 @@ replace the detection function with a better one."
     (regexp-end . "'*\\>")
     (regexp-discard . "\\`'+\\'")
     (case-fold . nil)
-    (read-or-skip-faces (nil)))
+    (read-or-skip-faces (nil))
+    (action-autoselect . nil))
   "Hard-coded default language configuration for `wcheck-mode'.
 This constant is for Wcheck mode's internal use only. This
 provides useful defaults if both `wcheck-language-data' and
@@ -1813,9 +1830,13 @@ any kind of actions, though."
           (let* ((start (copy-marker (aref marked-text 1)))
                  (end (copy-marker (aref marked-text 2)))
                  (actions (wcheck-get-actions marked-text))
-                 (choice (if (and (display-popup-menus-p) event)
-                             (wcheck-choose-action-popup actions event)
-                           (wcheck-choose-action-minibuffer actions))))
+                 (choice (if (and (wcheck-query-language-data
+                                   (aref marked-text 4) 'action-autoselect)
+                                  (= 1 (length actions)))
+                             (cdr (car actions))
+                           (if (and (display-popup-menus-p) event)
+                               (wcheck-choose-action-popup actions event)
+                             (wcheck-choose-action-minibuffer actions)))))
             (cond ((and (stringp choice)
                         (markerp start)
                         (markerp end))
@@ -2111,7 +2132,8 @@ expression will return a boolean."
                   (eq key 'action-parser))
               (functionp value)))
         ((or (eq key 'connection)
-             (eq key 'case-fold)))
+             (eq key 'case-fold)
+             (eq key 'action-autoselect)))
         ((and (eq key 'read-or-skip-faces)
               (wcheck-list-of-lists-p value)))))
 
