@@ -1053,43 +1053,47 @@ separate line."
 
 (defun wcheck-receive-strings (process string)
   "`wcheck-mode' process output handler function."
-  (let ((buffer (wcheck-buffer-data-get :process process :buffer))
-        (parser (wcheck-query-language-data
-                 (wcheck-buffer-data-get :process process :language)
-                 'parser)))
-    (when (buffer-live-p buffer)
-      (with-current-buffer buffer
+  (let ((buffer (wcheck-buffer-data-get :process process :buffer)))
+    (wcheck-with-language-data
+        (nil (wcheck-buffer-data-get :process process :language))
+        (parser syntax (case-fold-search case-fold))
+      (when (buffer-live-p buffer)
+        (with-current-buffer buffer
 
-        ;; If process is running proceed to collect and paint the
-        ;; strings.
-        (condition-case error-data
-            (if (wcheck-process-running-p process)
-                (with-current-buffer (process-buffer process)
-                  (save-excursion
-                    (goto-char (point-max))
-                    (insert string)
-                    (let ((parsed-strings
-                           (save-match-data
-                             (save-excursion
-                               (goto-char (point-min))
-                               (condition-case nil (funcall parser)
-                                 (error (signal 'wcheck-funcall-error
-                                                nil)))))))
-                      (when (and parsed-strings
-                                 (wcheck-list-of-strings-p parsed-strings))
-                        (wcheck-buffer-data-set buffer :strings parsed-strings)
-                        (wcheck-buffer-data-set buffer :paint-req t)))))
+          ;; If process is running proceed to collect and paint the
+          ;; strings.
+          (condition-case error-data
+              (if (wcheck-process-running-p process)
+                  (with-current-buffer (process-buffer process)
+                    (save-excursion
+                      (goto-char (point-max))
+                      (insert string)
+                      (let ((parsed-strings
+                             (save-match-data
+                               (save-excursion
+                                 (goto-char (point-min))
+                                 (condition-case nil
+                                     (with-syntax-table (eval syntax)
+                                       (funcall parser))
+                                   (error (signal 'wcheck-funcall-error
+                                                  nil)))))))
+                        (when (and parsed-strings
+                                   (wcheck-list-of-strings-p parsed-strings))
+                          (wcheck-buffer-data-set
+                           buffer :strings parsed-strings)
+                          (wcheck-buffer-data-set buffer :paint-req t)))))
 
-              ;; It's not running. Turn off the mode.
-              (wcheck-mode -1)
-              (signal 'wcheck-error "Process is not running for buffer \"%s\""
-                      (buffer-name buffer)))
+                ;; It's not running. Turn off the mode.
+                (wcheck-mode -1)
+                (signal 'wcheck-error
+                        "Process is not running for buffer \"%s\""
+                        (buffer-name buffer)))
 
-          (wcheck-funcall-error
-           (message "Checker output parser function signaled an error"))
+            (wcheck-funcall-error
+             (message "Checker output parser function signaled an error"))
 
-          (wcheck-error
-           (message "%s" (cdr error-data))))))))
+            (wcheck-error
+             (message "%s" (cdr error-data)))))))))
 
 
 (defun wcheck-timer-paint-event ()
