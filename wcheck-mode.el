@@ -1011,7 +1011,7 @@ process which handles BUFFER. Each string in STRINGS is sent as
 separate line."
   (wcheck-with-language-data
       (nil (wcheck-buffer-data-get :buffer buffer :language))
-      (program)
+      (program syntax (case-fold-search case-fold))
 
     (condition-case nil
         (cond ((or (wcheck-buffer-data-get :buffer buffer :process)
@@ -1031,7 +1031,9 @@ separate line."
                  (with-current-buffer buffer
                    (let ((received
                           (save-match-data
-                            (condition-case nil (funcall program strings)
+                            (condition-case nil
+                                (with-syntax-table (eval syntax)
+                                  (funcall program strings))
                               (error (signal 'wcheck-funcall-error nil))))))
                      (if (wcheck-list-of-strings-p received)
                          (when received
