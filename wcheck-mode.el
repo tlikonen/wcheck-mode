@@ -1690,35 +1690,38 @@ function `wcheck-marked-text-at' function."
       (language (aref marked-text 4))
       ((program action-program)
        (args action-args)
-       (parser action-parser))
+       (parser action-parser)
+       (case-fold-search case-fold)
+       syntax)
 
-    (cond ((not (wcheck-action-program-configured-p language))
-           (signal 'wcheck-action-program-error language))
+    (with-syntax-table (eval syntax)
+      (cond ((not (wcheck-action-program-configured-p language))
+             (signal 'wcheck-action-program-error language))
 
-          ((and (stringp program)
-                (not parser))
-           (signal 'wcheck-parser-function-not-configured-error language))
+            ((and (stringp program)
+                  (not parser))
+             (signal 'wcheck-parser-function-not-configured-error language))
 
-          ((stringp program)
-           (with-temp-buffer
-             (insert (aref marked-text 0))
-             (apply #'call-process-region (point-min) (point-max)
-                    program t t nil args)
-             (goto-char (point-min))
+            ((stringp program)
+             (with-temp-buffer
+               (insert (aref marked-text 0))
+               (apply #'call-process-region (point-min) (point-max)
+                      program t t nil args)
+               (goto-char (point-min))
+               (wcheck-clean-actions
+                (save-match-data
+                  (condition-case nil (funcall parser marked-text)
+                    (error (signal 'wcheck-funcall-error
+                                   (concat "Action parser function "
+                                           "signaled an error"))))))))
+
+            ((functionp program)
              (wcheck-clean-actions
               (save-match-data
-                (condition-case nil (funcall parser marked-text)
+                (condition-case nil (funcall program marked-text)
                   (error (signal 'wcheck-funcall-error
-                                 (concat "Action parser function "
-                                         "signaled an error"))))))))
-
-          ((functionp program)
-           (wcheck-clean-actions
-            (save-match-data
-              (condition-case nil (funcall program marked-text)
-                (error (signal 'wcheck-funcall-error
-                               (concat "Action function signaled "
-                                       "an error"))))))))))
+                                 (concat "Action function signaled "
+                                         "an error")))))))))))
 
 
 (defun wcheck-clean-actions (actions)
