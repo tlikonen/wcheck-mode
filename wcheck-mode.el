@@ -1010,7 +1010,7 @@ STRINGS is a list of strings to be sent as input for the external
 process which handles BUFFER. Each string in STRINGS is sent as
 separate line."
   (wcheck-with-language-data
-      (language (wcheck-buffer-data-get :buffer buffer :language))
+      (nil (wcheck-buffer-data-get :buffer buffer :language))
       (program)
 
     (condition-case nil
@@ -1286,7 +1286,7 @@ operation was unsuccessful."
   (or (wcheck-buffer-data-get :buffer buffer :process)
       ;; It doesn't exist so start a new one.
       (wcheck-with-language-data
-          (language (wcheck-buffer-data-get :buffer buffer :language))
+          (nil (wcheck-buffer-data-get :buffer buffer :language))
           (program args (process-connection-type connection))
 
         (when (wcheck-program-executable-p program)
