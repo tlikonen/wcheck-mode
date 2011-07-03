@@ -298,12 +298,15 @@ face
     this LANGUAGE. The default is `wcheck-default-face'.
 
 syntax
-    VALUE is a symbol referring to an Emacs syntax table. This
-    will be the effective syntax table for `wcheck-mode's regular
-    expressions. It does not affect the syntax table settings
-    anywhere else. See the Info node `(elisp)Syntax Tables' for
-    more information. The default value is
-    `text-mode-syntax-table'.
+    VALUE is a variable (a symbol) referring to an Emacs syntax
+    table. This option temporarily sets the effective syntax
+    table when buffer's content is scanned with `regexp-start',
+    `regexp-body', `regexp-end' and `regexp-discard' (see below)
+    as well as when `program', `parser', `action-program' and
+    `action-parser' functions are called. The default value is
+    `text-mode-syntax-table'. This option does not affect syntax
+    table settings anywhere else. See the Info node
+    `(elisp)Syntax Tables' for more information on the topic.
 
 regexp-start
 regexp-body
@@ -371,12 +374,13 @@ regexp-discard
     option to empty string (\"\").
 
 case-fold
-    This boolean value is used to set value for variable
-    `case-fold-search' for LANGUAGE. Similarly to
-    `case-fold-search' the nil value means case-sensitive and a
-    non-nil means case-insensitive search. The default is
-    case-sensitive (nil). Note that this only has effect on
-    `wcheck-mode's internal regular expression search.
+    This boolean value is used to temporarily bind the value of
+    variable `case-fold-search'. The nil value means
+    case-sensitive and a non-nil means case-insensitive search.
+    The default is case-sensitive (nil). This option is effective
+    with `regexp-start', `regexp-body', `regexp-end' and
+    `regexp-discard' as well as when `program', `parser',
+    `action-program' and `action-parser' functions are called.
 
 read-or-skip-faces
     This option controls which faces `wcheck-mode' should read or
