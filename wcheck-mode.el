@@ -1711,7 +1711,7 @@ any kind of actions, though."
   "Get actions from external program or a function.
 
 MARKED-TEXT must be a vector such as the one returned by
-function `wcheck-marked-text-at' function."
+`wcheck-marked-text-at' function."
 
   (wcheck-with-language-data
       (language (aref marked-text 4))
