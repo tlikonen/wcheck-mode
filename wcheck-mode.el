@@ -569,7 +569,7 @@ any kind of useful actions by calling custom functions. There are
 a lot of possibilities.
 
 
-For configuration examples, see the README file in URL
+For configuration examples, see the README.org file in URL
 `https://github.com/tlikonen/wcheck-mode/blob/9fefa2eda/README.org'."
 
   :group 'wcheck
