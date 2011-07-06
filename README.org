@@ -287,6 +287,7 @@ start composing mail to that address. Here's the language configuration:
   ("email"
    (program . email-address-detect)
    (face . highlight)
+   (case-fold . t)
    (regexp-start . "\\<")
    (regexp-body . "\\S-+@\\S-+")
    (regexp-end . "\\>")
@@ -299,8 +300,7 @@ Then the needed functions:
 
 #+BEGIN_SRC emacs-lisp
   (defun email-address-detect (strings)
-    (let ((case-fold-search t)
-          addresses)
+    (let (addresses)
       (dolist (string strings addresses)
         (when (string-match "\\<[a-z.-]+\\>@\\<[a-z.-]+\\>" string)
           (push (match-string-no-properties 0 string) addresses)))))
