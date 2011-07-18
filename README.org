@@ -317,11 +317,11 @@ detection function with a better one.
 
 ** 7. The source code repository
 
-[[https://github.com/tlikonen/wcheck-mode]]
+GitHub repository URL: <[[https://github.com/tlikonen/wcheck-mode]]>
 
-The branch named "master" is the release branch and it should always be
+The branch named /master/ is the release branch and it should always be
 safe to use. New features and experimental code are developed in other
-branches and possibly merged to "master" when they are ready.
+branches and possibly merged to /master/ when they are ready.
 
 ** 8. Copyright and license
 
@@ -337,4 +337,4 @@ WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General
 Public License for more details.
 
-The license text: [[http://www.gnu.org/licenses/gpl-3.0.html]]
+The license text: <[[http://www.gnu.org/licenses/gpl-3.0.html]]>
