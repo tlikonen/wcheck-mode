@@ -1,6 +1,6 @@
 * Wcheck Mode
 
-*A general-purpose text-checker interface for Emacs text editor*
+*General-purpose text-checker interface for Emacs text editor*
 
 ** Contents
 
