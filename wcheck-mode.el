@@ -146,25 +146,27 @@
      (repeat
       :tag ""
       (cons :format "%v"
+
             (choice :format "%[Major mode%] %v"
                     (const :tag "All major modes"
-                           :match (lambda (widget value) (not value))
+                           :match (lambda (widget value) (null value))
                            nil)
                     (repeat
                      :tag "Select major modes"
                      :match (lambda (widget value)
-                              (and value (or (symbolp value) (listp value))))
+                              (or (symbolp value) (consp value)))
                      :value-to-internal (lambda (widget value)
                                           (if (symbolp value)
                                               (list value)
                                             value))
                      :value-to-external (lambda (widget value)
-                                          (if (and (listp value)
+                                          (if (and (consp value)
                                                    (symbolp (car value))
                                                    (null (cdr value)))
                                               (car value)
                                             value))
                      (symbol :format "%v")))
+
             (choice :format "%[Operation mode%] %v"
                     (const :tag "Read everything" nil)
                     (cons :tag "Read selected faces" :format "%v"
