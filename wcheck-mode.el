@@ -570,7 +570,7 @@ a lot of possibilities.
 
 
 For configuration examples, see the README.org file in URL
-`https://github.com/tlikonen/wcheck-mode/blob/9fefa2eda/README.org'."
+`https://github.com/tlikonen/wcheck-mode/blob/f03e676d/README.org'."
 
   :group 'wcheck
   :type
