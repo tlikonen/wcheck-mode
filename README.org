@@ -294,6 +294,7 @@ start composing mail to that address. Here's the language configuration:
    (regexp-start . "\\<")
    (regexp-body . "\\S-+@\\S-+")
    (regexp-end . "\\>")
+   (regexp-discard . "")
    (action-program . email-action-menu)
    (read-or-skip-faces
     (nil)))
