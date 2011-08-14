@@ -123,11 +123,12 @@ accessible keys, for example:
   (global-set-key (kbd "C-c p") 'wcheck-jump-backward)
 #+END_SRC
 
-Interactive command =wcheck-mode= toggles the text-checker for the
-current buffer. Command =wcheck-change-language= is used to switch
-languages and command =wcheck-actions= (or the right mouse button) opens
-an actions menu for marked text. Commands =wcheck-jump-forward= and
-=wcheck-jump-backward= jump to next or previous marked text area.
+Interactive command =wcheck-mode= toggles the text-checker minor mode
+for the current buffer. Command =wcheck-change-language= is used to
+switch languages and command =wcheck-actions= (or the right mouse
+button) opens an actions menu for marked text. Commands
+=wcheck-jump-forward= and =wcheck-jump-backward= jump to next or
+previous marked text area.
 
 A note for Emacs Lisp programmers: Emacs Lisp function
 =wcheck-marked-text-at= returns information about marked text at a
