@@ -197,45 +197,59 @@ use that syntax table when scanning buffers' content in that language.
 
 Below is an example on how to add an "Add to dictionary" feature to the
 actions menu, among spelling suggestions. First, there's the language
-configuration. The example is similar to the "British English"
-configuration above except that =action-parser= function is a bit more
-complicated. It's a lambda expression which calls
-=wcheck-parser-ispell-suggestions= and then adds "Add to dictionary"
-option in the front of the spelling suggestions list. Choosing that
-option from the actions menu will call function =add-word-to-dictionary=
-(which doesn't exist yet).
+configuration. The example below is similar to the "British English"
+configuration above except that Enchant spell-checker is used and
+=action-parser= is a custom function (which doesn't exist yet).
 
 #+BEGIN_SRC emacs-lisp
   ("British English"
-   (program . "/usr/bin/ispell")
-   (args "-l" "-d" "british")
-   (action-program . "/usr/bin/ispell")
-   (action-args "-a" "-d" "british")
-   (action-parser . (lambda (marked-text)
-                      (cons (cons "[Add to dictionary]"
-                                  'add-word-to-dictionary)
-                            (wcheck-parser-ispell-suggestions)))))
+   (program . "/usr/bin/enchant")
+   (args "-l" "-d" "en_GB")
+   (action-program . "/usr/bin/enchant")
+   (action-args "-a" "-d" "en_GB")
+   (action-parser . enchant-suggestions-menu))
 #+END_SRC
 
-Now we need to define the function =add-word-to-dictionary=. Below is an
-incomplete example. To make it complete you'll have to find out how and
-where your spelling checker stores user dictionaries. Then write code
-that adds a new string to the dictionary.
+The action parser is custom function =enchant-suggestions-menu=. It will
+call =wcheck-parser-ispell-suggestions= and then add "Add to dictionary"
+option in the front of the spelling suggestions list. Choosing that
+option from the actions menu will call function
+=enchant-add-to-dictionary= (which doesn't exist yet).
 
 #+BEGIN_SRC emacs-lisp
-  (defun add-word-to-dictionary (marked-text)
-    ;; MARKED-TEXT is a vector returned by
-    ;; `wcheck-marked-text-at' function.
+  (defun enchant-suggestions-menu (marked-text)
+    (cons (cons "[Add to dictionary]" 'enchant-add-to-dictionary)
+          (wcheck-parser-ispell-suggestions)))
+#+END_SRC
 
-    (let ((word (aref marked-text 0))
-          (language (aref marked-text 4)))
+Now we need to define the function =enchant-add-to-dictionary=. Below is
+an example that works in GNU/Linux systems (with Enchant spell-checker).
+For British English language the user dictionary file is
+=~/.config/enchant/en_GB.dic=. Actually the language code is extracted
+automatically from =wcheck-language-data= variable, so the same function
+works with any Enchant language.
 
-      ;; Do the actual work here. That is, write code that adds
-      ;; the string stored in variable "word" to the
-      ;; appropriate dictionary.
+(With small modifications it should work with other spelling checker and
+operating systems.)
 
-      (message "Added word \"%s\" to the %s dictionary"
-               word language)))
+#+BEGIN_SRC emacs-lisp
+  (defvar enchant-dictionaries-dir "~/.config/enchant")
+
+  (defun enchant-add-to-dictionary (marked-text)
+    (let* ((word (aref marked-text 0))
+           (language (aref marked-text 4))
+           (file (let ((code (nth 1 (member "-d" (wcheck-query-language-data
+                                                  language 'action-args)))))
+                   (when (stringp code)
+                     (concat (file-name-as-directory enchant-dictionaries-dir)
+                             code ".dic")))))
+
+      (when (and file (file-writable-p file))
+        (with-temp-buffer
+          (insert word) (newline)
+          (append-to-file (point-min) (point-max) file)
+          (message "Added word \"%s\" to the %s dictionary"
+                   word language)))))
 #+END_SRC
 
 Spell-checking human languages is not the only application for Wcheck
