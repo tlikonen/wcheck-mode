@@ -342,7 +342,7 @@ regexp-end
     regular expression special characters (with `regexp-quote'
     function) and marked in Emacs buffer using the following
     construction: `regexp-start + STRING + regexp-end'. The
-    STRING part is marked with `face' (see above) .
+    STRING part is marked with `face' (see above).
 
     You can't use grouping constructs `\\( ... \\)' in
     `regexp-start' because the back reference `\\1' is used for
