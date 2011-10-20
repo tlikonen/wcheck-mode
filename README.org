@@ -199,7 +199,7 @@ Below is an example on how to add an "Add to dictionary" feature to the
 actions menu, among spelling suggestions. First, there's the language
 configuration. The example below is similar to the "British English"
 configuration above except that Enchant spell-checker is used and
-=action-parser= is a custom function (which doesn't exist yet).
+=action-parser= is a custom function (which will be defined later).
 
 #+BEGIN_SRC emacs-lisp
   ("British English"
@@ -214,7 +214,7 @@ The action parser is custom function =enchant-suggestions-menu=. It will
 call =wcheck-parser-ispell-suggestions= and then add "Add to dictionary"
 option in the front of the spelling suggestions list. Choosing that
 option from the actions menu will call function
-=enchant-add-to-dictionary= (which doesn't exist yet).
+=enchant-add-to-dictionary= (will be defined later).
 
 #+BEGIN_SRC emacs-lisp
   (defun enchant-suggestions-menu (marked-text)
