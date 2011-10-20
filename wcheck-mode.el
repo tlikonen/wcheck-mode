@@ -521,10 +521,9 @@ action-parser
 
         `wcheck-parser-ispell-suggestions' parses substitute
         suggestions from the output of Ispell or compatible
-        program, such as Enchant or Aspell. Use this function as
-        the `action-parser' if you get spelling suggestions from
-        an Ispell-like program with its \"-a\" command-line
-        option.
+        program, such as Enchant. Use this function as the
+        `action-parser' if you get spelling suggestions from an
+        Ispell-like program with its \"-a\" command-line option.
 
         `wcheck-parser-lines' function turns each line in the
         output to individual substitute suggestions.
@@ -901,10 +900,9 @@ to a text-checker back-end and, based on its output, decides if
 some parts of text should be marked.
 
 Wcheck can be used with external spell-checker programs such as
-Ispell, Aspell and Enchant, but actually any tool that can
-receive text stream from standard input and send text to standard
-output can be used. The checker back-end can also be an Emacs
-Lisp function.
+Ispell and Enchant, but actually any tool that can receive text
+stream from standard input and send text to standard output can
+be used. The checker back-end can also be an Emacs Lisp function.
 
 Different configuration units are called \"languages\". See the
 documentation of variables `wcheck-language-data',
