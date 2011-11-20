@@ -5,6 +5,7 @@
 ;; Maintainer: Teemu Likonen <tlikonen@iki.fi>
 ;; Created: 2009-07-04
 ;; Version: 2011.07.27
+;; URL: https://github.com/tlikonen/wcheck-mode
 ;; Keywords: text spell check languages ispell
 
 
