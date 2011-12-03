@@ -229,8 +229,8 @@ For British English language the user dictionary file is
 automatically from =wcheck-language-data= variable, so the same function
 works with any Enchant language.
 
-(With small modifications it should work with other spelling checker and
-operating systems.)
+(With small modifications it should work with other spelling checkers
+and operating systems.)
 
 #+BEGIN_SRC emacs-lisp
   (defvar enchant-dictionaries-dir "~/.config/enchant")
