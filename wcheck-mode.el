@@ -4,12 +4,12 @@
 ;; Author: Teemu Likonen <tlikonen@iki.fi>
 ;; Maintainer: Teemu Likonen <tlikonen@iki.fi>
 ;; Created: 2009-07-04
-;; Version: 2011.07.27
+;; Version: 2012.01.29
 ;; URL: https://github.com/tlikonen/wcheck-mode
 ;; Keywords: text spell check languages ispell
 
 
-;; Copyright (C) 2009-2011 Teemu Likonen <tlikonen@iki.fi>
+;; Copyright (C) 2009-2012 Teemu Likonen <tlikonen@iki.fi>
 ;;
 ;; This program is free software: you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
