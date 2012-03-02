@@ -2080,7 +2080,7 @@ ALIST is a list of (A . B) items in which A and B are integers.
 Each item denote a buffer position range from A to B. This
 function returns a new list which has items in increasing order
 according to A's and all overlapping A B ranges are combined."
-  (let ((alist (sort (copy-tree alist)
+  (let ((alist (sort (copy-sequence alist)
                      (lambda (a b)
                        (< (car a) (car b)))))
         final previous)
