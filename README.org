@@ -34,7 +34,7 @@ output, decides if some parts of text should be marked in the buffer.
 In Wcheck mode's configuration different configuration units are called
 /languages/. In terms of a spelling checker it is natural to think of
 them as different human languages. Wcheck mode is not limited to that,
-though. Language is just a configuration unit for certain kind of text
+though. Language is just a configuration unit for a specific text
 checking purpose.
 
 Each language can use its own checker engine (external program or a
