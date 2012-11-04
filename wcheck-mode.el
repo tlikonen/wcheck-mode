@@ -70,6 +70,21 @@
 ;;; Settings
 
 
+(defconst wcheck-version "2012.01.29"
+  "`wcheck-mode' version string.")
+
+
+;;;###autoload
+(defun wcheck-version (&optional here)
+  "Print string describing `wcheck-mode's version.
+If optional argument HERE is non-nil, insert the version string
+at point."
+  (interactive "P")
+  (if here
+      (insert wcheck-version)
+    (message "%s" wcheck-version)))
+
+
 ;;;###autoload
 (defgroup wcheck nil
   "General interface for text checkers."
