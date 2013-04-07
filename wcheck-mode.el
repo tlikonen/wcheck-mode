@@ -70,7 +70,7 @@
 ;;; Settings
 
 
-(defconst wcheck-version "2012.01.29"
+(defconst wcheck-version "2013.04.07"
   "`wcheck-mode' version string.")
 
 
