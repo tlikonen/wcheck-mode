@@ -587,7 +587,7 @@ a lot of possibilities.
 
 
 For configuration examples, see the README.org file in URL
-`https://github.com/tlikonen/wcheck-mode/blob/2014c315/README.org'."
+`https://github.com/tlikonen/wcheck-mode'."
 
   :group 'wcheck
   :type
