@@ -1,10 +1,9 @@
-;;; wcheck-mode.el --- A general interface for text checkers
+;;; wcheck-mode.el --- General interface for text checkers
 
 
 ;; Author: Teemu Likonen <tlikonen@iki.fi>
 ;; Maintainer: Teemu Likonen <tlikonen@iki.fi>
 ;; Created: 2009-07-04
-;; Version: 2013.04.07
 ;; URL: https://github.com/tlikonen/wcheck-mode
 ;; Keywords: text spell check languages ispell
 
@@ -68,21 +67,6 @@
 
 
 ;;; Settings
-
-
-(defconst wcheck-version "2013.04.07"
-  "`wcheck-mode' version string.")
-
-
-;;;###autoload
-(defun wcheck-version (&optional here)
-  "Print string describing `wcheck-mode's version.
-If optional argument HERE is non-nil, insert the version string
-at point."
-  (interactive "P")
-  (if here
-      (insert wcheck-version)
-    (message "%s" wcheck-version)))
 
 
 ;;;###autoload
