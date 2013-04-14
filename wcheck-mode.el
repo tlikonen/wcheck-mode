@@ -1106,8 +1106,8 @@ separate line."
                 ;; It's not running. Turn off the mode.
                 (wcheck-mode -1)
                 (signal 'wcheck-error
-                        "Process is not running for buffer \"%s\""
-                        (buffer-name buffer)))
+                        (format "Process is not running for buffer \"%s\""
+                                (buffer-name buffer))))
 
             (wcheck-funcall-error
              (message "Checker output parser function signaled an error"))
