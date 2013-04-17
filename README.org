@@ -1,7 +1,8 @@
-#+LANGUAGE: en
 #+TITLE: Wcheck Mode
+#+OPTIONS: author:nil email:nil timestamp:nil
+#+LANGUAGE: en
 
-*General-purpose text-checker interface for Emacs text editor*
+General-purpose text-checker interface for Emacs text editor
 
 * Introduction
 
