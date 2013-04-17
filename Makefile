@@ -5,7 +5,7 @@ DESC := General interface for text checkers
 VERSION := $(shell date +%Y.%-m.%-d)
 MAIN := $(BASE).el
 PKG := $(BASE)-pkg.el
-FILES := $(MAIN) $(PKG) README COPYING
+FILES := $(MAIN) $(PKG) COPYING README.org README
 NAME := $(BASE)-$(VERSION)
 
 elpa: $(NAME).tar
