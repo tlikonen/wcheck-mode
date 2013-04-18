@@ -68,7 +68,7 @@ How does it compare to other spell-checkers?
 --------------------------------------------
 
 The open design makes Wcheck mode (internally) quite different from
-spell-checkers like [Flyspell][] mode and [Speck mode][]. They are
+spell-checkers like [Flyspell][] mode and [Speck][] mode. They are
 specific tools for spell-checking through Ispell or compatible program
 and are therefore very much tied to Ispell's features and command-line
 interface. This can be useful if you want to use Ispell or fully
@@ -85,8 +85,8 @@ It has more configuration possibilities than other spell-checkers and
 the on-the-fly checker performs very well. It's a true real-time
 checker.
 
-[Flyspell]:   http://www.emacswiki.org/emacs/FlySpell
-[Speck mode]: http://www.emacswiki.org/SpeckMode
+[Flyspell]: http://www.emacswiki.org/emacs/FlySpell
+[Speck]:    http://www.emacswiki.org/SpeckMode
 
 
 Install
