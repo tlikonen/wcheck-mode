@@ -21,6 +21,7 @@ standard output can be used. Wcheck mode sends parts of buffer's content
 to an external program or an Emacs Lisp function and, based on their
 output, decides if some parts of text should be marked in the buffer.
 
+
 Features
 --------
 
@@ -60,6 +61,7 @@ though. Wcheck mode can be configured to find almost any kind of text
 elements from buffer, mark them, and offer any kind of actions for
 marked text.
 
+
 How does it compare to other spell-checkers?
 --------------------------------------------
 
@@ -81,6 +83,7 @@ It has more configuration possibilities than other spell-checkers and
 the on-the-fly checker performs very well. It's a true real-time
 checker.
 
+
 Install
 -------
 
@@ -97,6 +100,7 @@ and add the following lines to Emacs's initialization file (`~/.emacs`):
       "Move point forward to next marked text area." t)
     (autoload 'wcheck-jump-backward "wcheck-mode"
       "Move point backward to previous marked text area." t)
+
 
 Configuration and basic usage
 -----------------------------
@@ -127,6 +131,7 @@ A note for Emacs Lisp programmers: Emacs Lisp function
 buffer position. Programmers can use it to perform any kind of actions
 for marked text. Function `wcheck-query-language-data` can be used for
 querying effective configuration data for any language.
+
 
 Examples
 --------
@@ -307,6 +312,7 @@ Note that detecting all valid email addresses is difficult and a much
 more advanced parser is needed for that. Feel free to replace the
 detection function with a better one.
 
+
 The source code repository
 --------------------------
 
@@ -315,6 +321,7 @@ GitHub repository URL: <https://github.com/tlikonen/wcheck-mode>
 The branch named _master_ is the release branch and it should always be
 safe to use. New features and experimental code are developed in other
 branches and possibly merged to _master_ when they are ready.
+
 
 Copyright and license
 ---------------------
