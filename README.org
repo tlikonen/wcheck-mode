@@ -269,9 +269,9 @@ whitespace string with empty string.
 
 Sometimes it's useful to highlight only a small number of keywords in
 buffer. The following example adds a language called "Highlight FIXMEs"
-to mark "FIXME" words. FIXME is some programmers' convention to put
-reminders in source code that some parts are not complete yet and will
-be fixed or completed later. In source code files such keywords are
+which marks only "FIXME" words. FIXME is some programmers' convention to
+put reminders in source code that some parts are not complete yet and
+will be fixed or completed later. In source code files such keywords are
 written in program's comments only, not in the actual code, so we use
 =read-or-skip-faces= feature to scan only the comments. This example
 configures it for =emacs-lisp-mode= and =c-mode=. In all other major
@@ -289,7 +289,7 @@ modes FIXMEs are marked everywhere.
 #+END_SRC
 
 The following example adds a language "email" for highlighting email
-addresses from buffer and creating an action menu which has option to
+addresses in buffer and creating an action menu which has option to
 start composing mail to that address. Here's the language configuration:
 
 #+BEGIN_SRC emacs-lisp
