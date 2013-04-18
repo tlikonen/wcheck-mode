@@ -92,7 +92,9 @@ checker.
 Install
 -------
 
-Put `wcheck-mode.el` file to some directory in your Emacs's `load-path`
+You can install Wcheck mode through [Marmalade][] package archive. It's
+the preferred way to install official releases. Alternatively you can
+put `wcheck-mode.el` file to some directory in your Emacs's `load-path`
 and add the following lines to Emacs's initialization file (`~/.emacs`):
 
     (autoload 'wcheck-mode "wcheck-mode"
@@ -105,6 +107,8 @@ and add the following lines to Emacs's initialization file (`~/.emacs`):
       "Move point forward to next marked text area." t)
     (autoload 'wcheck-jump-backward "wcheck-mode"
       "Move point backward to previous marked text area." t)
+
+[Marmalade]: http://marmalade-repo.org/
 
 
 Configuration and basic usage
