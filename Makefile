@@ -5,7 +5,7 @@ DESC := General interface for text checkers
 VERSION := $(shell date +%Y.%-m.%-d)
 MAIN := $(BASE).el
 PKG := $(BASE)-pkg.el
-FILES := $(MAIN) $(PKG) COPYING README.org README
+FILES := $(MAIN) $(PKG) COPYING README
 NAME := $(BASE)-$(VERSION)
 
 elpa: $(NAME).tar
@@ -22,9 +22,8 @@ $(PKG):
 		"$(BASE)" "$(VERSION)" "$(DESC)" >$@
 	@cat $@
 
-README: README.org
-	emacs -Q --batch --file $< --funcall org-export-as-ascii
-	mv -f -- $@.txt $@
+README: README.md
+	cp -f -- $< $@
 
 tag:
 	git tag -s $(VERSION) -m 'Version $(VERSION)' HEAD
