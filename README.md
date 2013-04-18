@@ -7,8 +7,8 @@ Wcheck Mode
 Introduction
 ------------
 
-Wcheck mode is a general-purpose text-checker interface for Emacs text
-editor. Wcheck mode a minor mode which provides an on-the-fly text
+Wcheck mode is a general-purpose text-checker interface for [Emacs][]
+text editor. Wcheck mode a minor mode which provides an on-the-fly text
 checker. It checks the visible text area, as you type, and possibly
 highlights some parts of it. What is checked and how are all
 configurable.
@@ -20,6 +20,8 @@ that can receive text from standard input stream and send text to
 standard output can be used. Wcheck mode sends parts of buffer's content
 to an external program or an Emacs Lisp function and, based on their
 output, decides if some parts of text should be marked in the buffer.
+
+[Emacs]: http://www.gnu.org/software/emacs/
 
 
 Features
@@ -66,9 +68,9 @@ How does it compare to other spell-checkers?
 --------------------------------------------
 
 The open design makes Wcheck mode (internally) quite different from
-spell-checkers like Flyspell mode and Speck mode. They are specific
-tools for spell-checking through Ispell or compatible program and are
-therefore very much tied to Ispell's features and command-line
+spell-checkers like [Flyspell][] mode and [Speck mode][]. They are
+specific tools for spell-checking through Ispell or compatible program
+and are therefore very much tied to Ispell's features and command-line
 interface. This can be useful if you want to use Ispell or fully
 compatible program for spell-checking natural languages. However, not
 all human languages can be supported through Ispell and there can also
@@ -82,6 +84,9 @@ spelling checker for human languages Wcheck mode can be a good choice.
 It has more configuration possibilities than other spell-checkers and
 the on-the-fly checker performs very well. It's a true real-time
 checker.
+
+[Flyspell]:   http://www.emacswiki.org/emacs/FlySpell
+[Speck mode]: http://www.emacswiki.org/SpeckMode
 
 
 Install
