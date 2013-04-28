@@ -95,7 +95,8 @@ Install
 You can install Wcheck mode through [Marmalade][] package archive. It's
 the preferred way to install official releases. Alternatively you can
 put `wcheck-mode.el` file to some directory in your Emacs's `load-path`
-and add the following lines to Emacs's initialization file (`~/.emacs`):
+and add the following lines to Emacs's initialization file (`~/.emacs`
+or `~/.emacs.d/init.el`):
 
     (autoload 'wcheck-mode "wcheck-mode"
       "Toggle wcheck-mode." t)
