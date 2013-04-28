@@ -8,8 +8,8 @@ Introduction
 ------------
 
 Wcheck mode is a general-purpose text-checker interface for [Emacs][]
-text editor. Wcheck mode a minor mode which provides an on-the-fly text
-checker. It checks the visible text area, as you type, and possibly
+text editor. Wcheck mode is a minor mode which provides an on-the-fly
+text checker. It checks the visible text area, as you type, and possibly
 highlights some parts of it. What is checked and how are all
 configurable.
 
