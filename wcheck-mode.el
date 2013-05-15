@@ -570,7 +570,7 @@ any kind of useful actions by calling custom functions. There are
 a lot of possibilities.
 
 
-For configuration examples, see the README.org file in URL
+For configuration examples, see the README file in URL
 `https://github.com/tlikonen/wcheck-mode'."
 
   :group 'wcheck
