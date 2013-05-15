@@ -514,7 +514,7 @@ action-parser
 
     The `action-parser' function should examine the buffer for
     interesting information (such as spelling suggestions) and
-    return them the in the format that is described below.
+    return them in the format that is described below.
 
     For the most common cases there are three parser functions
     already implemented:
