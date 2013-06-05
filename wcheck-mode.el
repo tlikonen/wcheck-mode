@@ -1393,7 +1393,7 @@ areas, including invisible ones. Otherwise skip invisible text."
 
         (when font-lock-mode
           (save-excursion
-            (font-lock-fontify-region (min beg end) (max beg end))))
+            (jit-lock-fontify-now (min beg end) (max beg end))))
 
         (wcheck-with-language-data
             (language (wcheck-buffer-data-get :buffer buffer :language))
