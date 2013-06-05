@@ -66,6 +66,11 @@
 ;;; Code:
 
 
+(eval-when-compile
+  ;; Silence compiler
+  (declare-function show-entry "outline"))
+
+
 ;;; Settings
 
 
