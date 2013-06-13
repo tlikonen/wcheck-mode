@@ -7,7 +7,6 @@ MAIN := $(BASE).el
 PKG := $(BASE)-pkg.el
 FILES := $(MAIN) $(PKG) COPYING README
 NAME := $(BASE)-$(VERSION)
-ELC := $(patsubst %.el,%.elc,$(wildcard *.el))
 
 elpa: $(NAME).tar
 sign: $(NAME).tar.sig
@@ -27,13 +26,13 @@ $(PKG):
 README: README.md
 	cp -f -- $< $@
 
-$(ELC): %.elc: %.el
+$(BASE).elc: %.elc: %.el
 	emacs -Q --batch -f batch-byte-compile $<
 
 tag:
 	git tag -s $(VERSION) -m 'Version $(VERSION)' HEAD
 
 clean:
-	rm -f -- $(PKG) $(BASE)*.tar* README $(ELC)
+	rm -f -- $(PKG) $(BASE)*.tar* README $(BASE).elc
 
 .PHONY: elpa sign tag clean elc
