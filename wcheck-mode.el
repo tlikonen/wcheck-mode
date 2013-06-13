@@ -476,8 +476,7 @@ If you use `wcheck-mode' as a spelling checker then it's natural
 to configure an action menu that offers spelling suggestions for
 the misspelled word. The action menu could also have an option to
 add the word to spell-checker's dictionary, so that the word is
-recognized next time. See examples of this kind of configuration
-below.
+recognized next time.
 
 action-program
 action-args
