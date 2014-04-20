@@ -635,15 +635,7 @@ Here's an example value for the variable:
        message-header-subject message-cited-text)))"
 
   :group 'wcheck
-  :type `(repeat ,wcheck-language-data-customize-interface))
-
-
-(defvar wcheck-read-or-skip-faces nil
-  "This variable is not used anymore.
-This variable's functionality is now included in variables
-`wcheck-language-data' and `wcheck-language-data-defaults'. See
-the documentation of the former variable for information on how
-to configure the feature.")
+  :type `(repeat ,wcheck--language-data-customize-interface))
 
 
 ;;;###autoload
