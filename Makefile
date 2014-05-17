@@ -8,7 +8,8 @@ PKG := $(BASE)-pkg.el
 FILES := $(MAIN) $(PKG) COPYING README
 NAME := $(BASE)-$(VERSION)
 
-elpa: $(NAME).tar
+elpa: $(PKG)
+tar: $(NAME).tar
 sign: $(NAME).tar.sig
 elc: $(BASE).elc
 
@@ -33,6 +34,6 @@ tag:
 	git tag -s $(VERSION) -m 'Version $(VERSION)' HEAD
 
 clean:
-	rm -f -- $(PKG) $(BASE)*.tar* README $(BASE).elc
+	rm -f -- $(BASE)*.tar* README $(BASE).elc
 
-.PHONY: elpa sign tag clean elc
+.PHONY: elpa tar sign tag clean elc $(PKG)
