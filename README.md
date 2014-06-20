@@ -221,14 +221,16 @@ option from the actions menu will call function
             (wcheck-parser-ispell-suggestions)))
 
 Now we need to define the function `enchant-add-to-dictionary`. Below is
-an example that works in GNU/Linux systems (with Enchant spell-checker).
-For British English language the user dictionary file is
-`~/.config/enchant/en_GB.dic`. Actually the language code is extracted
-automatically from `wcheck-language-data` variable, so the same function
-works with any Enchant language.
+an example that works in GNU/Linux systems with Enchant spell-checker.
+With small modifications it should work with other spelling checkers and
+operating systems.
 
-(With small modifications it should work with other spelling checkers
-and operating systems.)
+For British English language the user dictionary file is
+`~/.config/enchant/en_GB.dic`. The language code is extracted
+automatically from `wcheck-language-data` variable, so the function
+works with any Enchant language. Note that adding a word to a dictionary
+file doesn't have effect on the current spell-checking session. The
+Enchant program must be restarted.
 
     (defvar enchant-dictionaries-dir "~/.config/enchant")
 
