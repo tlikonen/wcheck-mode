@@ -55,13 +55,12 @@ or (2) executing interactive command `wcheck-actions` while the cursor
 (the point) is on a marked text.
 
 If you use Wcheck mode as a spelling checker then it's natural to
-configure an action menu that offers spelling suggestions for the
-misspelled word. The action menu could also have an option to add the
-marked word to spell-checker's dictionary, so that the word is
-recognized in the future. That's only one application for Wcheck mode,
-though. Wcheck mode can be configured to find almost any kind of text
-elements from buffer, mark them, and offer any kind of actions for
-marked text.
+configure an action menu that offers spelling suggestions for misspelled
+words. The action menu could also have an option to add marked word to
+spell-checker's dictionary, so that the word is recognized in the
+future. That's only one application for Wcheck mode, though. Wcheck mode
+can be configured to find almost any kind of text elements from buffer,
+mark them, and offer any kind of actions for marked text.
 
 
 How does it compare to other spell-checkers?
@@ -178,7 +177,7 @@ actions (spelling suggestions) menu for user.
 
     ("Finnish"
      (program . "/usr/bin/enchant")
-     (args  "-l" "-d" "fi")
+     (args "-l" "-d" "fi")
      (syntax . my-finnish-syntax-table)
      (action-program . "/usr/bin/enchant")
      (action-args "-a" "-d" "fi")
