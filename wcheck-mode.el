@@ -1422,10 +1422,9 @@ areas, including invisible ones. Otherwise skip invisible text."
                                         regexp-discard
                                         (match-string-no-properties 1)))))
                          ;; Add the match to the string list.
-                         (add-to-list
-                          'strings (match-string-no-properties 1))))
+                         (push (match-string-no-properties 1) strings)))
                   (setq old-point (point)))))
-            strings))))))
+            (delete-dups strings)))))))
 
 
 (defun wcheck--paint-strings (buffer beg end strings &optional invisible)
