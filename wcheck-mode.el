@@ -62,7 +62,6 @@
 ;; and, based on their output, decides if some parts of text should be
 ;; marked in the buffer.
 
-
 ;;; Code:
 
 
@@ -215,7 +214,9 @@
 
 
 ;;;###autoload
-(defcustom wcheck-language-data nil
+(defcustom wcheck-language-data
+  ;; FIXME: Auto-fill by looking at installed spell-checkers and dictionaries!
+  nil
   "Language configuration for `wcheck-mode'.
 
 The variable is an association list (alist) and its elements are
@@ -1233,10 +1234,9 @@ requested it."
     (remove-hook (car hook) (cdr hook))))
 
 
-(defun wcheck--hook-window-scroll (window window-start)
+(defun wcheck--hook-window-scroll (window _window-start)
   "`wcheck-mode' hook for window scroll.
-Request update for the buffer when its window have been
-scrolled."
+Request update for the buffer when its window have been scrolled."
   (with-current-buffer (window-buffer window)
     (when wcheck-mode
       (wcheck--buffer-data-set (current-buffer) :read-req t))))
@@ -1268,7 +1268,7 @@ changed."
                 'currentframe))
 
 
-(defun wcheck--hook-after-change (beg end len)
+(defun wcheck--hook-after-change (_beg _end _len)
   "`wcheck-mode' hook for buffer content change.
 Request update for the buffer when its content has been edited."
   ;; The buffer that has changed is the current buffer when this hook
@@ -1858,7 +1858,7 @@ or nil."
     nil))
 
 
-(defun wcheck-parser-lines (&rest ignored)
+(defun wcheck-parser-lines (&rest _ignored)
   "Parser for newline-separated output.
 Return current buffer's lines as a list of strings."
   (delete-dups (split-string (buffer-substring-no-properties
@@ -1866,7 +1866,7 @@ Return current buffer's lines as a list of strings."
                              "\n+" t)))
 
 
-(defun wcheck-parser-whitespace (&rest ignored)
+(defun wcheck-parser-whitespace (&rest _ignored)
   "Parser for whitespace-separated output.
 Split current buffer's content to whitespace-separated tokens and
 return them as a list of strings."
@@ -1875,7 +1875,7 @@ return them as a list of strings."
                              "[ \f\t\n\r\v]+" t)))
 
 
-(defun wcheck-parser-ispell-suggestions (&rest ignored)
+(defun wcheck-parser-ispell-suggestions (&rest _ignored)
   "Parser for Ispell-compatible programs' spelling suggestions."
   (let ((search-spaces-regexp nil))
     (when (re-search-forward "^& [^ ]+ \\([0-9]+\\) [0-9]+: \\(.+\\)$" nil t)
@@ -1900,17 +1900,17 @@ return them as a list of strings."
     (delete-dups faces)))
 
 
-(defun wcheck--major-mode-face-settings (language major-mode)
-  "Return read/skip face settings for MAJOR-MODE."
+(defun wcheck--major-mode-face-settings (language mode)
+  "Return read/skip face settings for MODE."
   (let ((data (wcheck-query-language-data language 'read-or-skip-faces))
         conf)
     (catch 'answer
       (while data
         (setq conf (pop data))
         (when (or (eq nil (car conf))
-                  (eq major-mode (car conf))
+                  (eq mode (car conf))
                   (and (listp (car conf))
-                       (memq major-mode (car conf))))
+                       (memq mode (car conf))))
           (throw 'answer conf))))))
 
 
@@ -1923,14 +1923,14 @@ Both arguments are lists."
         (throw 'found t)))))
 
 
-(defun wcheck--generate-face-predicate (language major-mode)
-  "Generates a face predicate expression for scanning buffer.
+(defun wcheck--generate-face-predicate (language mode)
+  "Generate a face predicate expression for scanning buffer.
 Return a predicate expression that is used to decide whether
 `wcheck-mode' should read or paint text at the current point
-position with LANGUAGE and MAJOR-MODE. Evaluating the predicate
+position with LANGUAGE and MODE. Evaluating the predicate
 expression will return a boolean."
   (let* ((face-settings (wcheck--major-mode-face-settings
-                         language major-mode))
+                         language mode))
          (mode (nth 1 face-settings))
          (faces (nthcdr 2 face-settings)))
     (cond ((not font-lock-mode)
@@ -1954,25 +1954,22 @@ expression will return a boolean."
               (syntax-table-p (and (boundp value) (eval value)))))
         ((and (eq key 'face)
               (facep value)))
-        ((and (or (eq key 'regexp-start)
-                  (eq key 'regexp-body)
-                  (eq key 'regexp-end)
-                  (eq key 'regexp-discard))
+        ((and (memq key '(regexp-start regexp-body regexp-end regexp-discard))
               (stringp value)))
-        ((and (or (eq key 'program)
-                  (eq key 'action-program))
+        ((and (memq key '(program action-program))
               (or (stringp value)
-                  (functionp value))))
+                  (functionp value)
+                  (and value (symbolp value)
+                       (error "Invalid %s value: %S" key value)))))
         ((and (eq key 'args)
               (wcheck--list-of-strings-p value)))
         ((and (eq key 'action-args)
               (wcheck--list-of-strings-p value)))
-        ((and (or (eq key 'parser)
-                  (eq key 'action-parser))
-              (functionp value)))
-        ((or (eq key 'connection)
-             (eq key 'case-fold)
-             (eq key 'action-autoselect)))
+        ((and (memq key '(parser action-parser))
+              (or (functionp value)
+                  (and value
+                       (error "%s not a function: %S" key value)))))
+        ((memq key '(connection case-fold action-autoselect)))
         ((and (eq key 'read-or-skip-faces)
               (wcheck--list-of-lists-p value)))))
 
@@ -2020,11 +2017,11 @@ a (valid) value for the KEY then query the value from
 
 
 (defun wcheck--program-executable-p (program)
-  "Return t if PROGRAM is executable regular file."
-  (and (stringp program)
-       (file-regular-p program)
-       (file-executable-p program)
-       t))
+  "Return non-nil if PROGRAM is executable regular file."
+  (when (stringp program)
+    (let ((f (executable-find program)))
+      (and (file-regular-p f)
+           (file-executable-p f)))))
 
 
 (defun wcheck--program-configured-p (language)
@@ -2128,7 +2125,7 @@ range BEG to END. Otherwise remove all overlays."
   (remove-overlays beg end 'wcheck-mode t))
 
 
-(defun wcheck--remove-changed-overlay (overlay after beg end &optional len)
+(defun wcheck--remove-changed-overlay (overlay after _beg _end &optional _len)
   "Hook for removing overlay which is being edited."
   (unless after
     (delete-overlay overlay)))
