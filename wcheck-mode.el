@@ -2022,9 +2022,10 @@ a (valid) value for the KEY then query the value from
 (defun wcheck--program-executable-p (program)
   "Return t if PROGRAM is executable regular file."
   (and (stringp program)
-       (file-regular-p program)
-       (file-executable-p program)
-       t))
+       (or (and (file-regular-p program)
+                (file-executable-p program))
+           (executable-find program))))
+
 
 
 (defun wcheck--program-configured-p (language)
