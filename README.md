@@ -337,7 +337,7 @@ branches and possibly merged to _master_ when they are ready.
 Copyright and license
 ---------------------
 
-Copyright (C) 2009-2014 Teemu Likonen <<tlikonen@iki.fi>>
+Copyright (C) 2009-2015 Teemu Likonen <<tlikonen@iki.fi>>
 
 This program is free software: you can redistribute it and/or modify it
 under the terms of the GNU General Public License as published by the
