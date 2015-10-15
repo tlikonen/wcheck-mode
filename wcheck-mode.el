@@ -2058,8 +2058,7 @@ The returned value is a floating point number."
          (high (nth 0 idle))
          (low (nth 1 idle))
          (micros (nth 2 idle)))
-    (+ (* high
-          (expt 2 16))
+    (+ (* high 65536)
        low
        (/ micros 1000000.0))))
 
