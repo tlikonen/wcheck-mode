@@ -2179,12 +2179,13 @@ But only if it doesn't exist already."
 If optional TARGET-KEY is not given return all data associated
 with the matching KEY VALUE."
   (catch 'answer
-    (dolist (item wcheck--buffer-data)
-      (when (equal value (aref item (wcheck--buffer-data-key-index key)))
-        (throw 'answer (if target-key
-                           (aref item (wcheck--buffer-data-key-index
-                                       target-key))
-                         item))))))
+    (let ((index (wcheck--buffer-data-key-index key)))
+      (dolist (item wcheck--buffer-data)
+        (when (equal value (aref item index))
+          (throw 'answer (if target-key
+                             (aref item (wcheck--buffer-data-key-index
+                                         target-key))
+                           item)))))))
 
 
 (defun wcheck--buffer-data-get-all (&optional key)
