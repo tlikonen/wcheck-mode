@@ -108,7 +108,7 @@ Emacs's initialization file (`~/.emacs` or `~/.emacs.d/init.el`):
       "Move point backward to previous marked text area." t)
 
 [Marmalade]: http://marmalade-repo.org/
-[Melpa]:     http://melpa.milkbox.net/
+[Melpa]:     https://melpa.org/
 
 
 Configuration and basic usage
