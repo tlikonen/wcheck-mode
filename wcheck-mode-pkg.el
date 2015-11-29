@@ -1,2 +1,2 @@
-(define-package "wcheck-mode" "2015.10.15"
+(define-package "wcheck-mode" "2015.11.29"
   "General interface for text checkers")
