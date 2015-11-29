@@ -339,6 +339,8 @@ Copyright and license
 
 Copyright (C) 2009-2015 Teemu Likonen <<tlikonen@iki.fi>>
 
+PGP: [4E10 55DC 84E9 DFF6 13D7 8557 719D 69D3 2453 9450][PGP]
+
 This program is free software: you can redistribute it and/or modify it
 under the terms of the GNU General Public License as published by the
 Free Software Foundation, either version 3 of the License, or (at your
@@ -350,3 +352,5 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General
 Public License for more details.
 
 The license text: <http://www.gnu.org/licenses/gpl-3.0.html>
+
+[PGP]: http://koti.kapsi.fi/~dtw/pgp-key.asc
