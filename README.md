@@ -18,7 +18,7 @@ checking text. For example, Wcheck mode can be used with spell-checker
 programs such as Ispell, Enchant and Hunspell, but actually any tool
 that can receive text from standard input stream and send text to
 standard output can be used. Wcheck mode sends parts of buffer's content
-to an external program or an Emacs Lisp function and, based on their
+to an external program or an Emacs Lisp function and, relying on their
 output, decides if some parts of text should be marked in the buffer.
 
 [Emacs]: http://www.gnu.org/software/emacs/

@@ -59,7 +59,7 @@
 ;; actually any tool that can receive text from standard input stream
 ;; and send text to standard output can be used. Wcheck mode sends parts
 ;; of buffer's content to an external program or an Emacs Lisp function
-;; and, based on their output, decides if some parts of text should be
+;; and, relying on their output, decides if some parts of text should be
 ;; marked in the buffer.
 
 ;;; Code:
@@ -893,7 +893,7 @@ otherwise turn it off. If ARG is not given toggle the mode.
 
 Wcheck is a minor mode for automatically checking and marking
 strings in Emacs buffer. Wcheck sends (parts of) buffer's content
-to a text-checker back-end and, based on its output, decides if
+to a text-checker back-end and, relying on its output, decides if
 some parts of text should be marked.
 
 Wcheck can be used with external spell-checker programs such as
