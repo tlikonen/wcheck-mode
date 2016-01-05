@@ -1932,7 +1932,7 @@ expression will return a boolean."
          (mode (nth 1 face-settings))
          (faces (nthcdr 2 face-settings)))
     (cond ((not font-lock-mode)
-           t)
+           (lambda () t))
           ((eq mode 'read)
            `(lambda ()
               (wcheck--face-found-p
@@ -1943,7 +1943,7 @@ expression will return a boolean."
               (not (wcheck--face-found-p
                     ',faces (wcheck--collect-faces
                              (match-beginning 1) (match-end 1))))))
-          (t t))))
+          (t (lambda () t)))))
 
 
 ;;; Miscellaneous low-level functions
