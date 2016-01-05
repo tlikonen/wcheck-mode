@@ -1416,7 +1416,7 @@ areas, including invisible ones. Otherwise skip invisible text."
                                      (match-beginning 1) 'invisible buffer
                                      end)))
 
-                        ((and (eval face-p)
+                        ((and (funcall face-p)
                               (or (equal regexp-discard "")
                                   (not (string-match
                                         regexp-discard
@@ -1476,7 +1476,7 @@ text."
                            (goto-char (next-single-char-property-change
                                        (match-beginning 1) 'invisible buffer
                                        end)))
-                          ((eval face-p)
+                          ((funcall face-p)
                            ;; Make an overlay.
                            (wcheck--make-overlay
                             buffer ol-face ol-mouse-face ol-help-echo ol-keymap
@@ -1936,13 +1936,15 @@ expression will return a boolean."
     (cond ((not font-lock-mode)
            t)
           ((eq mode 'read)
-           `(wcheck--face-found-p
-             ',faces (wcheck--collect-faces
-                      (match-beginning 1) (match-end 1))))
+           `(lambda ()
+              (wcheck--face-found-p
+               ',faces (wcheck--collect-faces
+                        (match-beginning 1) (match-end 1)))))
           ((eq mode 'skip)
-           `(not (wcheck--face-found-p
-                  ',faces (wcheck--collect-faces
-                           (match-beginning 1) (match-end 1)))))
+           `(lambda ()
+              (not (wcheck--face-found-p
+                    ',faces (wcheck--collect-faces
+                             (match-beginning 1) (match-end 1))))))
           (t t))))
 
 
