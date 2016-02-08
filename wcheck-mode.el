@@ -2021,10 +2021,10 @@ a (valid) value for the KEY then query the value from
 
 (defun wcheck--program-executable-p (program)
   "Return non-nil if PROGRAM is executable regular file."
-  (and (stringp program)
-       (or (and (file-regular-p program)
-                (file-executable-p program))
-           (executable-find program))))
+  (when (stringp program)
+    (let ((f (executable-find program)))
+      (and (file-regular-p f)
+           (file-executable-p f)))))
 
 
 (defun wcheck--program-configured-p (language)
