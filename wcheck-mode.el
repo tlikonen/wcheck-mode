@@ -359,12 +359,12 @@ regexp-end
 
     The default values for the regular expressions are
 
-        \\=\\<'*         (regexp-start)
+        \\=\\<\\='*         (regexp-start)
         \\w+?         (regexp-body)
-        '*\\=\\>         (regexp-end)
+        \\='*\\=\\>         (regexp-end)
 
     Effectively they match a series of word characters defined in
-    the effective syntax table. Single quotes (') at the start
+    the effective syntax table. Single quotes (\\=') at the start
     and end of a word are excluded. This is probably a good thing
     when using `wcheck-mode' as a spelling checker.
 
@@ -376,7 +376,7 @@ regexp-discard
     to define exceptions to the `regexp-body' match. The default
     value is
 
-        \\`'+\\'
+        \\\\=`\\='+\\\\='
 
     which discards the body string if it consists only of single
     quotes. This was chosen as the default because the default
@@ -622,10 +622,10 @@ Here's an example value for the variable:
      (connection . nil)
      (face . wcheck-default-face)
      (syntax . text-mode-syntax-table)
-     (regexp-start . \"\\\\=\\<'*\")
+     (regexp-start . \"\\\\=\\<\\='*\")
      (regexp-body . \"\\\\w+?\")
-     (regexp-end . \"'*\\\\=\\>\")
-     (regexp-discard . \"\\\\`'+\\\\'\")
+     (regexp-end . \"\\='*\\\\=\\>\")
+     (regexp-discard . \"\\\\\\=`\\='+\\\\\\='\")
      (case-fold . nil)
      (read-or-skip-faces
       ((emacs-lisp-mode c-mode) read
