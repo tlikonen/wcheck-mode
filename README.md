@@ -352,4 +352,4 @@ Public License for more details.
 
 The license text: <http://www.gnu.org/licenses/gpl-3.0.html>
 
-[PGP]: http://koti.kapsi.fi/~dtw/pgp-key.asc
+[PGP]: http://www.iki.fi/tlikonen/pgp-key.asc
