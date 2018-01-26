@@ -2023,7 +2023,8 @@ a (valid) value for the KEY then query the value from
   "Return non-nil if PROGRAM is executable regular file."
   (when (stringp program)
     (let ((f (executable-find program)))
-      (and (file-regular-p f)
+      (and f
+           (file-regular-p f)
            (file-executable-p f)))))
 
 
