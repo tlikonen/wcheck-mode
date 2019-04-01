@@ -91,10 +91,10 @@ checker.
 Install
 -------
 
-You can install Wcheck mode through [Melpa][] package archive.
-Alternatively you can put `wcheck-mode.el` file to some directory in
-your Emacs's `load-path` and add the following lines to Emacs's
-initialization file (`~/.emacs` or `~/.emacs.d/init.el`):
+You can install Wcheck mode through [GNU Elpa][Elpa] or [Melpa][]
+package archives. Alternatively you can put `wcheck-mode.el` file to
+some directory in your Emacs's `load-path` and add the following lines
+to Emacs's initialization file (`~/.emacs` or `~/.emacs.d/init.el`):
 
     (autoload 'wcheck-mode "wcheck-mode"
       "Toggle wcheck-mode." t)
@@ -107,6 +107,7 @@ initialization file (`~/.emacs` or `~/.emacs.d/init.el`):
     (autoload 'wcheck-jump-backward "wcheck-mode"
       "Move point backward to previous marked text area." t)
 
+[Elpa]:  https://elpa.gnu.org/
 [Melpa]: https://melpa.org/
 
 
