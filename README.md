@@ -290,6 +290,22 @@ modes FIXMEs are marked everywhere.
       ((emacs-lisp-mode c-mode) read font-lock-comment-face)
       (nil)))
 
+The following example shows American English, which checks comments and stings.
+
+    (setq wcheck-language-data
+      '(("American English"
+          (program . "/usr/bin/enchant-2")
+          (args "-l" "-d" "en_US")
+          (action-program . "/usr/bin/enchant-2")
+          (action-args "-a" "-d" "en_US")
+          (action-parser . enchant-suggestions-menu)
+          (read-or-skip-faces
+            ((emacs-lisp-mode c-mode)
+              read font-lock-comment-face
+              read font-lock-string-face)
+            (nil)))))
+    (setq wcheck-language "American English")
+
 The following example adds a language "email" for highlighting email
 addresses in buffer and creating an action menu which has option to
 start composing mail to that address. Here's the language configuration:
@@ -306,7 +322,7 @@ start composing mail to that address. Here's the language configuration:
      (read-or-skip-faces
       (nil)))
 
-Then the needed functions:
+This example 
 
     (defun email-address-detect (strings)
       (let (addresses)
