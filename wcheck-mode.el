@@ -1940,15 +1940,15 @@ will return a boolean."
     (cond ((not font-lock-mode)
            (lambda () t))
           ((eq mode 'read)
-           `(lambda ()
-              (wcheck--face-found-p
-               ',faces (wcheck--collect-faces
-                        (match-beginning 1) (match-end 1)))))
+           (lambda ()
+             (wcheck--face-found-p
+              faces (wcheck--collect-faces
+                     (match-beginning 1) (match-end 1)))))
           ((eq mode 'skip)
-           `(lambda ()
-              (not (wcheck--face-found-p
-                    ',faces (wcheck--collect-faces
-                             (match-beginning 1) (match-end 1))))))
+           (lambda ()
+             (not (wcheck--face-found-p
+                   faces (wcheck--collect-faces
+                          (match-beginning 1) (match-end 1))))))
           (t (lambda () t)))))
 
 
