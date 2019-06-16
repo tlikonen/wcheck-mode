@@ -1142,6 +1142,7 @@ requested it."
 
 
 (defun wcheck--timer-jump-event ()
+  (require 'outline)
   (wcheck--loop-over-jump-reqs buffer
     (let* ((jump-req (wcheck--buffer-data-get :buffer buffer :jump-req))
            (start (wcheck--jump-req-start jump-req))
