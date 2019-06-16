@@ -2,7 +2,7 @@
 
 ;;; wcheck-mode.el --- General interface for text checkers
 
-;; Copyright (C) 2009-2016  Teemu Likonen <tlikonen@iki.fi>
+;; Copyright (C) 2009-2019  Teemu Likonen <tlikonen@iki.fi>
 
 ;; Author: Teemu Likonen <tlikonen@iki.fi>
 ;; Maintainer: Teemu Likonen <tlikonen@iki.fi>

@@ -389,7 +389,7 @@ branches and possibly merged to _master_ when they are ready.
 Copyright and license
 ---------------------
 
-Copyright (C) 2009-2016 Teemu Likonen <<tlikonen@iki.fi>>
+Copyright (C) 2009-2019 Teemu Likonen <<tlikonen@iki.fi>>
 
 OpenPGP key: [4E10 55DC 84E9 DFF6 13D7 8557 719D 69D3 2453 9450][PGP]
 
