@@ -145,6 +145,9 @@ querying effective configuration data for any language.
 Examples
 --------
 
+
+### Basic spell-checking
+
 Here are some examples on how you can fill the `wcheck-language-data`
 variable. The value is a list of language configurations:
 
@@ -195,6 +198,52 @@ It copies `text-mode-syntax-table` (which Wcheck mode uses by default)
 and sets the syntactic meaning of the ASCII hyphen character (-) to a
 word character ("w"). Wcheck mode and its regular expression search will
 use that syntax table when scanning buffers' content in that language.
+
+
+### Choose what to check
+
+On some Emacs major modes there is no need to spell-check everything in
+the buffer. For example, in programming languages modes it is probably
+useful to spell-check only programmer's comments and functions'
+documentation strings. This can be configured with language option
+`read-or-skip-faces`. The following incomplete language configuration
+makes special treatment for emacs-lisp-mode: it checks only text areas
+which have been marked with faces `font-lock-comment-face` and
+`font-lock-doc-face`.
+
+    ("Some language"
+     ;; (program ...)
+     ;; (args ...)
+     (read-or-skip-faces
+      (emacs-lisp-mode read font-lock-comment-face font-lock-string-face)))
+
+Because `read-or-skip-faces` settings is often not a language specific
+option but a general major mode specific setting it can be more useful
+to put `read-or-skip-faces` settings in variable
+`wcheck-language-data-defaults` like this:
+
+    (setq wcheck-language-data-defaults
+          '((read-or-skip-faces
+             ((emacs-lisp-mode lisp-mode)
+              read font-lock-comment-face font-lock-doc-face)
+             (sh-mode
+              read font-lock-comment-face)
+             (message-mode
+              read nil message-header-subject message-cited-text)
+             (latex-mode
+              read nil font-latex-sectioning-1-face
+              font-latex-sectioning-2-face
+              font-latex-sectioning-3-face
+              font-latex-sectioning-4-face font-latex-bold-face
+              font-latex-italic-face font-lock-constant-face)
+             (org-mode
+              read nil org-level-1 org-level-2 org-level-3 org-level-4
+              org-level-5 org-level-6 org-level-7 org-level-8)
+             (git-commit-mode
+              read nil git-commit-summary-face))))
+
+
+### Add words to dictionary
 
 Below is an example on how to add an "Add to dictionary" feature to the
 actions menu, among spelling suggestions. First, there's the language
@@ -248,6 +297,9 @@ Enchant program must be restarted.
             (append-to-file (point-min) (point-max) file)
             (message "Added word \"%s\" to the %s dictionary"
                      word language)))))
+
+
+### Other than human languages
 
 Spell-checking human languages is not the only application for Wcheck
 mode. The following configuration adds language called "Trailing
