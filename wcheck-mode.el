@@ -1925,11 +1925,11 @@ Both arguments are lists."
 
 
 (defun wcheck--generate-face-predicate (language mode)
-  "Generate a face predicate expression for scanning buffer.
-Return a predicate expression that is used to decide whether
+  "Generate a face predicate function for scanning buffer.
+Return a predicate function that is used to decide whether
 `wcheck-mode' should read or paint text at the current point
-position with LANGUAGE and MODE. Evaluating the predicate
-expression will return a boolean."
+position with LANGUAGE and MODE. The called predicate function
+will return a boolean."
   (let* ((face-settings (wcheck--major-mode-face-settings
                          language mode))
          (mode (nth 1 face-settings))
