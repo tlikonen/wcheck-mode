@@ -818,7 +818,7 @@ interactively) then change the global default language."
 
     (wcheck--program-not-configured-error
      (wcheck-mode -1)
-     (message "Language \"%s\": checker program is not configured"
+     (message "Checker program is not configured for language \"%s\""
               (cdr error-data)))))
 
 
@@ -847,7 +847,7 @@ interactively) then change the global default language."
 
       (wcheck--program-not-configured-error
        (wcheck-mode -1)
-       (message "Language \"%s\": checker program not configured"
+       (message "Checker program is not configured for language \"%s\""
                 (cdr error-data)))
 
       (wcheck--language-does-not-exist-error
@@ -1695,11 +1695,11 @@ any kind of actions, though."
         return-value)
 
     (wcheck--action-program-error
-     (message "Language \"%s\": action program is not configured"
+     (message "Action program is not configured for language \"%s\""
               (cdr error-data)))
 
     (wcheck--parser-function-not-configured-error
-     (message "Language \"%s\": parser function is not configured"
+     (message "Parser function is not configured for language \"%s\""
               (cdr error-data)))
 
     (wcheck--error
