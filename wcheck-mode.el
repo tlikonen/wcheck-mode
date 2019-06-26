@@ -1,6 +1,4 @@
-;; -*- lexical-binding: t -*-
-
-;;; wcheck-mode.el --- General interface for text checkers
+;;; wcheck-mode.el --- General interface for text checkers  -*- lexical-binding: t -*-
 
 ;; Copyright (C) 2009-2019  Teemu Likonen <tlikonen@iki.fi>
 
