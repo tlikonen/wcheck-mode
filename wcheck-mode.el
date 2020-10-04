@@ -1,12 +1,13 @@
 ;;; wcheck-mode.el --- General interface for text checkers  -*- lexical-binding: t -*-
 
-;; Copyright (C) 2009-2019  Teemu Likonen <tlikonen@iki.fi>
+;; Copyright (C) 2009-2020  Free Software Foundation, Inc.
 
 ;; Author: Teemu Likonen <tlikonen@iki.fi>
 ;; Maintainer: Teemu Likonen <tlikonen@iki.fi>
 ;; Created: 2009-07-04
 ;; URL: https://github.com/tlikonen/wcheck-mode
 ;; Keywords: text spell check languages ispell
+;; Version: 2019.6.17
 
 ;; This program is free software: you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
