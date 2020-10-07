@@ -84,8 +84,8 @@ It has more configuration possibilities than other spell-checkers and
 the on-the-fly checker performs very well. It's a true real-time
 checker.
 
-[Flyspell]: http://www.emacswiki.org/emacs/FlySpell
-[Speck]:    http://www.emacswiki.org/SpeckMode
+[Flyspell]: https://www.emacswiki.org/emacs/FlySpell
+[Speck]:    https://www.emacswiki.org/emacs/SpeckMode
 
 
 Install
