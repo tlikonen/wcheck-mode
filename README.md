@@ -21,7 +21,7 @@ standard output can be used. Wcheck mode sends parts of buffer's content
 to an external program or an Emacs Lisp function and, relying on their
 output, decides if some parts of text should be marked in the buffer.
 
-[Emacs]: http://www.gnu.org/software/emacs/
+[Emacs]: https://www.gnu.org/software/emacs/
 
 
 Features
