@@ -121,13 +121,17 @@ easy configuration you can use the options in the customize group named
 _wcheck_ (`M-x customize-group RET wcheck RET`).
 
 It might be convenient to bind Wcheck mode commands to some easily
-accessible keys, for example:
+accessible keys. The next example uses `C-c w` as a prefix key for
+different Wcheck commands:
 
-    (global-set-key (kbd "C-c s") 'wcheck-mode)
-    (global-set-key (kbd "C-c l") 'wcheck-change-language)
-    (global-set-key (kbd "C-c c") 'wcheck-actions)
-    (global-set-key (kbd "C-c n") 'wcheck-jump-forward)
-    (global-set-key (kbd "C-c p") 'wcheck-jump-backward)
+    (global-set-key (kbd "C-c w")
+                    (let ((map (make-sparse-keymap)))
+                      (define-key map "w" 'wcheck-mode)
+                      (define-key map "l" 'wcheck-change-language)
+                      (define-key map "a" 'wcheck-actions)
+                      (define-key map "f" 'wcheck-jump-forward)
+                      (define-key map "b" 'wcheck-jump-backward)
+                      map))
 
 Interactive command `wcheck-mode` toggles the text-checker minor mode
 for the current buffer. Command `wcheck-change-language` is used to
