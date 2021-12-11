@@ -2059,14 +2059,7 @@ a (valid) value for the KEY then query the value from
 (defun wcheck--current-idle-time-seconds ()
   "Return current idle time in seconds.
 The returned value is a floating point number."
-  (let* ((idle (or (current-idle-time)
-                   '(0 0 0)))
-         (high (nth 0 idle))
-         (low (nth 1 idle))
-         (micros (nth 2 idle)))
-    (+ (* high 65536)
-       low
-       (/ micros 1000000.0))))
+  (float-time (or (current-idle-time) 0)))
 
 
 (defun wcheck--combine-overlapping-areas (alist)
