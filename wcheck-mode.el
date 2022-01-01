@@ -1,6 +1,6 @@
 ;;; wcheck-mode.el --- General interface for text checkers  -*- lexical-binding: t -*-
 
-;; Copyright (C) 2009-2020  Free Software Foundation, Inc.
+;; Copyright (C) 2009-2021  Free Software Foundation, Inc.
 
 ;; Author: Teemu Likonen <tlikonen@iki.fi>
 ;; Maintainer: Teemu Likonen <tlikonen@iki.fi>
